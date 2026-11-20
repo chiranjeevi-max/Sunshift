@@ -1,0 +1,55 @@
+[gd_resource type="AudioBusLayout" format=3 uid="uid://l36leuxeogrh"]
+
+[sub_resource type="AudioEffectLimiter" id="AudioEffectLimiter_j3pel"]
+ceiling_db = -1.0
+threshold_db = -4.0
+soft_clip_db = 1.5
+soft_clip_ratio = 6.0
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_g28q7"]
+predelay_msec = 42.0
+predelay_feedback = 0.35
+room_size = 0.62
+damping = 0.55
+spread = 0.8
+hipass = 0.18
+dry = 0.82
+wet = 0.26
+
+[sub_resource type="AudioEffectChorus" id="AudioEffectChorus_n8wo2"]
+dry = 0.86
+wet = 0.34
+voice/1/delay_ms = 14.0
+voice/1/rate_hz = 0.45
+voice/1/depth_ms = 4.2
+voice/1/level_db = -6.0
+voice/2/delay_ms = 22.5
+voice/2/rate_hz = 0.31
+voice/2/depth_ms = 6.5
+voice/2/level_db = -9.0
+
+[resource]
+bus/0/effect/0/effect = SubResource("AudioEffectLimiter_j3pel")
+bus/0/effect/0/enabled = true
+bus/1/name = &"Music"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = 0.0
+bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("AudioEffectReverb_g28q7")
+bus/1/effect/0/enabled = true
+bus/1/effect/1/effect = SubResource("AudioEffectChorus_n8wo2")
+bus/1/effect/1/enabled = true
+bus/2/name = &"Ambience"
+bus/2/solo = false
+bus/2/mute = false
+bus/2/bypass_fx = false
+bus/2/volume_db = 0.0
+bus/2/send = &"Master"
+bus/3/name = &"SFX"
+bus/3/solo = false
+bus/3/mute = false
+bus/3/bypass_fx = false
+bus/3/volume_db = 0.0
+bus/3/send = &"Master"

@@ -1,0 +1,44 @@
+# Godot 4 generated state
+.godot/
+android/
+*.translation
+export_presets.cfg
+
+# Exported builds
+build/
+builds/
+export/
+*.app
+*.dmg
+*.exe
+*.pck
+*.zip
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Local workspace tools
+.cursor/
+.claude/
+.aider*
+.windsurf/
+PROMPT.md
+CLAUDE.md
+
+# Local notes
+wiki/
+
+# Local tooling environment
+.venv/
+__pycache__/
+
+# Verification artifacts
+*.log
+test.err
+
+# Stray capture probes
+ui_probe_*
