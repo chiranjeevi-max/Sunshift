@@ -1,0 +1,35 @@
+{
+  "id": "A3-QC",
+  "act": 3,
+  "title": "Quiet Corner · Paper Boat Dock",
+  "subtitle": "Canal Dock · 7:20 PM",
+  "postcard_caption": "The little boat drifted out on water that had gone the colour of the sky.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 7,
+  "player_spawn": [1, 3],
+  "tiles": [
+    { "x": 6, "y": 6, "type": "puddle" },
+    { "x": 5, "y": 3, "type": "floor", "elevation": 1 },
+    { "x": 3, "y": 5, "type": "floor", "elevation": 1 },
+    { "x": 9, "y": 0, "type": "wall", "elevation": 2 },
+    { "x": 10, "y": 0, "type": "wall", "elevation": 2 },
+    { "x": 12, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 12, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 9, "y": 8, "type": "water" },
+    { "x": 10, "y": 8, "type": "water" },
+    { "x": 11, "y": 8, "type": "water" },
+    { "x": 12, "y": 8, "type": "water" },
+    { "x": 13, "y": 8, "type": "water" }
+  ],
+  "props": [
+    { "id": "pri_dock", "type": "prism", "x": 4, "y": 4, "elevation": 0, "state": 0 },
+    { "id": "pri_boat", "type": "prism", "x": 6, "y": 2, "elevation": 1, "state": 0 },
+    { "id": "gla_boat", "type": "stained_glass", "x": 7, "y": 3, "elevation": 1, "state": 0 },
+    { "id": "awn_sky", "type": "awning", "x": 5, "y": 3, "elevation": 1, "state": 1 },
+    { "id": "awn_dock", "type": "awning", "x": 3, "y": 5, "elevation": 1, "state": 1 }
+  ],
+  "wishes": [
+    { "id": "w_child", "who": "child", "x": 9, "y": 5, "elevation": 0, "need": "ROSE_LIGHT" },
+    { "id": "w_dock", "who": "pigeon", "x": 2, "y": 6, "elevation": 0, "need": "SHARED_BEAM", "targets": [[1, 7]] }
+  ]
+}

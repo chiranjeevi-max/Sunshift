@@ -1,0 +1,33 @@
+{
+  "id": "A3-13",
+  "act": 3,
+  "title": "A Chime Between Banks",
+  "subtitle": "Canal Footbridge · 6:05 PM",
+  "postcard_caption": "The wind-chime turned one shaft of light into two and nobody across the water had to shout.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 0,
+  "player_spawn": [2, 6],
+  "tiles": [
+    { "x": 6, "y": 0, "type": "water" },
+    { "x": 6, "y": 1, "type": "water" },
+    { "x": 6, "y": 2, "type": "water" },
+    { "x": 6, "y": 3, "type": "water" },
+    { "x": 6, "y": 4, "type": "water" },
+    { "x": 6, "y": 5, "type": "water" },
+    { "x": 6, "y": 6, "type": "water" },
+    { "x": 6, "y": 7, "type": "water" },
+    { "x": 6, "y": 8, "type": "water" },
+    { "x": 7, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 8, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 8, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 0, "type": "wall", "elevation": 2 },
+    { "x": 2, "y": 0, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "pri_chime", "type": "prism", "x": 4, "y": 2, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_florist", "who": "florist", "x": 5, "y": 1, "elevation": 0, "need": "SHARED_BEAM", "targets": [[2, 4]] },
+    { "id": "w_pigeon", "who": "pigeon", "x": 5, "y": 5, "elevation": 0, "need": "SOFT_SHADE" }
+  ]
+}

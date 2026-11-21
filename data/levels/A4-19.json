@@ -1,0 +1,24 @@
+{
+  "id": "A4-19",
+  "act": 4,
+  "title": "Last Tram Home",
+  "subtitle": "Coastal Dusk · 7:40 PM",
+  "postcard_caption": "The lamp found them before the tram did.",
+  "grid_size": [12, 8],
+  "initial_sun_angle": 0,
+  "player_spawn": [2, 6],
+  "tiles": [
+    { "x": 3, "y": 3, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 4, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 5, "type": "wall", "elevation": 2 },
+    { "x": 4, "y": 3, "type": "wall", "elevation": 2 },
+    { "x": 4, "y": 5, "type": "wall", "elevation": 2 },
+    { "x": 5, "y": 3, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "lan_platform", "type": "lantern", "x": 4, "y": 4, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_commuter", "who": "commuter", "x": 5, "y": 5, "elevation": 0, "need": "LANTERN_GLOW" }
+  ]
+}

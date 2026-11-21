@@ -1,0 +1,98 @@
+{
+  "id": "A2-11",
+  "act": 2,
+  "title": "Old Post Office Porch",
+  "subtitle": "Old Post Office Porch · 5:50 PM",
+  "postcard_caption": "Every envelope was sorted without a squint, and the thermos was still warm at closing.",
+  "grid_size": [
+    15,
+    10
+  ],
+  "initial_sun_angle": 2,
+  "player_spawn": [
+    2,
+    8
+  ],
+  "tiles": [
+    {
+      "x": 12,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 12,
+      "y": 7,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "type": "floor",
+      "elevation": 1
+    }
+  ],
+  "props": [
+    {
+      "id": "awn_porch",
+      "type": "awning",
+      "x": 6,
+      "y": 4,
+      "elevation": 1,
+      "state": 0
+    },
+    {
+      "id": "sh_porch",
+      "type": "shutter",
+      "x": 8,
+      "y": 6,
+      "elevation": 1,
+      "state": 1
+    },
+    {
+      "id": "mir_rail",
+      "type": "mirror",
+      "x": 5,
+      "y": 6,
+      "elevation": 0,
+      "state": 1
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_postman",
+      "who": "postman",
+      "x": 6,
+      "y": 5,
+      "elevation": 0,
+      "need": "SOFT_SHADE"
+    },
+    {
+      "id": "w_thermos",
+      "who": "tea_set",
+      "x": 12,
+      "y": 6,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    }
+  ]
+}

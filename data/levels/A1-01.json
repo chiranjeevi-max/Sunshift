@@ -1,0 +1,19 @@
+{
+  "id": "A1-01",
+  "act": 1,
+  "title": "The Warm Stone",
+  "subtitle": "Limestone Alleys · 5:10 PM",
+  "postcard_caption": "She found the warm stone the moment the sun came round.",
+  "grid_size": [12, 8],
+  "initial_sun_angle": 4,
+  "player_spawn": [2, 6],
+  "tiles": [
+    { "x": 0, "y": 0, "type": "void", "elevation": 0 },
+    { "x": 8, "y": 3, "type": "wall", "elevation": 2 },
+    { "x": 8, "y": 2, "type": "wall", "elevation": 2 }
+  ],
+  "props": [],
+  "wishes": [
+    { "id": "w_cat", "who": "cat", "x": 5, "y": 3, "elevation": 0, "need": "WARM_SUN" }
+  ]
+}

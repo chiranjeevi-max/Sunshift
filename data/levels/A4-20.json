@@ -1,0 +1,27 @@
+{
+  "id": "A4-20",
+  "act": 4,
+  "title": "Fold by Fold",
+  "subtitle": "Rooftop Laundromat · 7:55 PM",
+  "postcard_caption": "The lantern kept a little of the afternoon and gave it to the tired hands folding sheets.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 6,
+  "player_spawn": [2, 7],
+  "tiles": [
+    { "x": 5, "y": 5, "type": "floor", "elevation": 1 },
+    { "x": 2, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 12, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 0, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "lan_laundry", "type": "lantern", "x": 6, "y": 5, "elevation": 0, "state": 0 },
+    { "id": "awn_laundry", "type": "awning", "x": 5, "y": 5, "elevation": 1, "state": 0 },
+    { "id": "mir_line", "type": "mirror", "x": 11, "y": 4, "elevation": 0, "state": 1 }
+  ],
+  "wishes": [
+    { "id": "w_student", "who": "student", "x": 6, "y": 6, "elevation": 0, "need": "LANTERN_GLOW" },
+    { "id": "w_pup", "who": "pup", "x": 8, "y": 5, "elevation": 0, "need": "SOFT_SHADE" },
+    { "id": "w_mother", "who": "mother", "x": 11, "y": 2, "elevation": 1, "need": "SHARED_BEAM", "targets": [[11, 1]] }
+  ]
+}

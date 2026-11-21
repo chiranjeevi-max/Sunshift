@@ -1,0 +1,108 @@
+{
+  "id": "A2-10",
+  "act": 2,
+  "title": "Spice Merchant's Lane",
+  "subtitle": "Spice Merchant's Lane · 5:45 PM",
+  "postcard_caption": "The chillies reddened on their mat while she shelled peas in the cool of the lane.",
+  "grid_size": [
+    15,
+    9
+  ],
+  "initial_sun_angle": 1,
+  "player_spawn": [
+    2,
+    7
+  ],
+  "tiles": [
+    {
+      "x": 11,
+      "y": 6,
+      "type": "puddle",
+      "elevation": 0
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 9,
+      "y": 3,
+      "type": "floor",
+      "elevation": 1
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "type": "floor",
+      "elevation": 1
+    }
+  ],
+  "props": [
+    {
+      "id": "awn_chilli",
+      "type": "awning",
+      "x": 9,
+      "y": 3,
+      "elevation": 1,
+      "state": 0
+    },
+    {
+      "id": "awn_peas",
+      "type": "awning",
+      "x": 5,
+      "y": 3,
+      "elevation": 1,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_chilli",
+      "who": "elder_woman",
+      "x": 9,
+      "y": 5,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    },
+    {
+      "id": "w_peas",
+      "who": "florist",
+      "x": 6,
+      "y": 5,
+      "elevation": 0,
+      "need": "SOFT_SHADE"
+    }
+  ]
+}

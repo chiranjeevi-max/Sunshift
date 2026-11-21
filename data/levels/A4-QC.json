@@ -1,0 +1,30 @@
+{
+  "id": "A4-QC",
+  "act": 4,
+  "title": "Quiet Corner · Harbor Bell",
+  "subtitle": "Cliffside Harbor · 9:20 PM",
+  "postcard_caption": "The bell rang once with a warmth the sky had already given up on.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 4,
+  "player_spawn": [1, 7],
+  "tiles": [
+    { "x": 5, "y": 6, "type": "floor", "elevation": 1 },
+    { "x": 4, "y": 2, "type": "floor", "elevation": 1 },
+    { "x": 2, "y": 2, "type": "floor", "elevation": 1 },
+    { "x": 12, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 2, "y": 8, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "lan_bell", "type": "lantern", "x": 6, "y": 6, "elevation": 0, "state": 0 },
+    { "id": "awn_bell", "type": "awning", "x": 5, "y": 6, "elevation": 1, "state": 0 },
+    { "id": "mir_quay", "type": "mirror", "x": 4, "y": 4, "elevation": 0, "state": 1 },
+    { "id": "mir_stair", "type": "mirror", "x": 4, "y": 2, "elevation": 1, "state": 0 },
+    { "id": "pri_bell", "type": "prism", "x": 2, "y": 2, "elevation": 1, "state": 0 },
+    { "id": "lan_quay", "type": "lantern", "x": 11, "y": 5, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_keeper", "who": "harbor_keeper", "x": 6, "y": 7, "elevation": 0, "need": "LANTERN_GLOW" },
+    { "id": "w_pigeon", "who": "pigeon", "x": 8, "y": 6, "elevation": 0, "need": "SOFT_SHADE" },
+    { "id": "w_bell", "who": "elder_man", "x": 2, "y": 1, "elevation": 1, "need": "SHARED_BEAM", "targets": [[2, 4]] }
+  ]
+}

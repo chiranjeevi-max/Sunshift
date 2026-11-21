@@ -1,0 +1,25 @@
+{
+  "id": "A1-02",
+  "act": 1,
+  "title": "Sourdough at Six",
+  "subtitle": "Limestone Alleys · 6:05 PM",
+  "postcard_caption": "The baker kept the loaf warm without ever moving the tray.",
+  "grid_size": [12, 8],
+  "initial_sun_angle": 3,
+  "player_spawn": [2, 6],
+  "tiles": [
+    { "x": 1, "y": 3, "type": "wall", "elevation": 2 },
+    { "x": 4, "y": 2, "type": "wall", "elevation": 2 },
+    { "x": 4, "y": 4, "type": "wall", "elevation": 2 },
+    { "x": 5, "y": 4, "type": "wall", "elevation": 2 },
+    { "x": 6, "y": 4, "type": "wall", "elevation": 2 },
+    { "x": 6, "y": 3, "type": "wall", "elevation": 2 },
+    { "x": 6, "y": 2, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "mir_bakery", "type": "mirror", "x": 2, "y": 3, "elevation": 0, "state": 1 }
+  ],
+  "wishes": [
+    { "id": "w_baker", "who": "baker", "x": 5, "y": 3, "elevation": 0, "need": "WARM_SUN" }
+  ]
+}

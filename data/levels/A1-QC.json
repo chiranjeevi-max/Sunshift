@@ -1,0 +1,110 @@
+{
+  "id": "A1-QC",
+  "act": 1,
+  "title": "Rooftop Coop",
+  "subtitle": "Rooftop Coop · 6:50 PM",
+  "postcard_caption": "Three pigeons stayed on the warm parapet a little longer than they meant to.",
+  "grid_size": [
+    14,
+    10
+  ],
+  "initial_sun_angle": 0,
+  "player_spawn": [
+    2,
+    8
+  ],
+  "tiles": [
+    {
+      "x": 11,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 3,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 4,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "type": "wall",
+      "elevation": 2
+    }
+  ],
+  "props": [
+    {
+      "id": "mir_coop",
+      "type": "mirror",
+      "x": 9,
+      "y": 9,
+      "elevation": 0,
+      "state": 0
+    },
+    {
+      "id": "mir_perch",
+      "type": "mirror",
+      "x": 12,
+      "y": 7,
+      "elevation": 0,
+      "state": 0
+    },
+    {
+      "id": "mir_sill",
+      "type": "mirror",
+      "x": 10,
+      "y": 6,
+      "elevation": 0,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_pair",
+      "who": "pigeon",
+      "x": 9,
+      "y": 8,
+      "elevation": 0,
+      "need": "SHARED_BEAM",
+      "targets": [
+        [
+          10,
+          8
+        ]
+      ]
+    },
+    {
+      "id": "w_sill",
+      "who": "pigeon",
+      "x": 13,
+      "y": 5,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    }
+  ]
+}

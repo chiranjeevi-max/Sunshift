@@ -1,0 +1,96 @@
+{
+  "id": "A1-05",
+  "act": 1,
+  "title": "Stoop & Marigolds",
+  "subtitle": "Stoop & Marigolds · 6:20 PM",
+  "postcard_caption": "The marigolds straightened before supper while the boy never looked up from his comic.",
+  "grid_size": [
+    15,
+    9
+  ],
+  "initial_sun_angle": 5,
+  "player_spawn": [
+    2,
+    6
+  ],
+  "tiles": [
+    {
+      "x": 10,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "type": "wall",
+      "elevation": 2
+    }
+  ],
+  "props": [
+    {
+      "id": "mir_stoop",
+      "type": "mirror",
+      "x": 2,
+      "y": 5,
+      "elevation": 0,
+      "state": 1
+    },
+    {
+      "id": "mir_box",
+      "type": "mirror",
+      "x": 9,
+      "y": 4,
+      "elevation": 0,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_comic",
+      "who": "child",
+      "x": 6,
+      "y": 5,
+      "elevation": 0,
+      "need": "SHARED_BEAM",
+      "targets": [
+        [
+          8,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "w_marigold",
+      "who": "marigold",
+      "x": 9,
+      "y": 2,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    }
+  ]
+}

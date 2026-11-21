@@ -1,0 +1,106 @@
+{
+  "id": "A2-08",
+  "act": 2,
+  "title": "Monsoon Courtyard",
+  "subtitle": "Monsoon Courtyard · 5:15 PM",
+  "postcard_caption": "The tea tray was dry and warm before the next shower crossed the courtyard.",
+  "grid_size": [
+    14,
+    9
+  ],
+  "initial_sun_angle": 7,
+  "player_spawn": [
+    2,
+    7
+  ],
+  "tiles": [
+    {
+      "x": 10,
+      "y": 5,
+      "type": "puddle",
+      "elevation": 0
+    },
+    {
+      "x": 10,
+      "y": 6,
+      "type": "puddle",
+      "elevation": 0
+    },
+    {
+      "x": 11,
+      "y": 5,
+      "type": "puddle",
+      "elevation": 0
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 4,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 5,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "type": "floor",
+      "elevation": 1
+    }
+  ],
+  "props": [
+    {
+      "id": "awn_balcony",
+      "type": "awning",
+      "x": 6,
+      "y": 4,
+      "elevation": 1,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_tea",
+      "who": "tea_set",
+      "x": 9,
+      "y": 6,
+      "elevation": 1,
+      "need": "WARM_SUN"
+    },
+    {
+      "id": "w_cat",
+      "who": "cat",
+      "x": 5,
+      "y": 5,
+      "elevation": 0,
+      "need": "SOFT_SHADE"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "A3-15",
+  "act": 3,
+  "title": "Bach Below the Floorboards",
+  "subtitle": "Cellar Violinist · 6:35 PM",
+  "postcard_caption": "She played on in the cool dark while the light climbed the stairs to someone else.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 0,
+  "player_spawn": [1, 7],
+  "tiles": [
+    { "x": 5, "y": 5, "type": "puddle" },
+    { "x": 8, "y": 7, "type": "floor", "elevation": 1 },
+    { "x": 6, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 2, "y": 8, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "pri_cellar", "type": "prism", "x": 3, "y": 3, "elevation": 0, "state": 0 },
+    { "id": "shu_glare", "type": "shutter", "x": 8, "y": 7, "elevation": 1, "state": 1 }
+  ],
+  "wishes": [
+    { "id": "w_musician", "who": "musician", "x": 7, "y": 6, "elevation": 0, "need": "SOFT_SHADE" },
+    { "id": "w_listener", "who": "elder_man", "x": 5, "y": 1, "elevation": 1, "need": "SHARED_BEAM", "targets": [[2, 4]] }
+  ]
+}

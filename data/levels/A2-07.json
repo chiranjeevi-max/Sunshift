@@ -1,0 +1,76 @@
+{
+  "id": "A2-07",
+  "act": 2,
+  "title": "Red-Oxide Veranda",
+  "subtitle": "Red-Oxide Veranda · 4:55 PM",
+  "postcard_caption": "She slept through the whole golden hour without once squinting at the light.",
+  "grid_size": [
+    14,
+    9
+  ],
+  "initial_sun_angle": 7,
+  "player_spawn": [
+    2,
+    7
+  ],
+  "tiles": [
+    {
+      "x": 3,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "type": "floor",
+      "elevation": 1
+    }
+  ],
+  "props": [
+    {
+      "id": "awn_veranda",
+      "type": "awning",
+      "x": 7,
+      "y": 3,
+      "elevation": 1,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_nurse",
+      "who": "nurse",
+      "x": 7,
+      "y": 4,
+      "elevation": 0,
+      "need": "SOFT_SHADE"
+    },
+    {
+      "id": "w_hibiscus",
+      "who": "hibiscus",
+      "x": 11,
+      "y": 5,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    }
+  ]
+}

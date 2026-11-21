@@ -1,0 +1,84 @@
+{
+  "id": "A2-09",
+  "act": 2,
+  "title": "Teak Shophouse",
+  "subtitle": "Teak Shophouse · 5:30 PM",
+  "postcard_caption": "Her paper stayed dry and pale while the cat found the one warm square in the room.",
+  "grid_size": [
+    15,
+    9
+  ],
+  "initial_sun_angle": 3,
+  "player_spawn": [
+    2,
+    7
+  ],
+  "tiles": [
+    {
+      "x": 11,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "type": "floor",
+      "elevation": 1
+    }
+  ],
+  "props": [
+    {
+      "id": "sh_window",
+      "type": "shutter",
+      "x": 6,
+      "y": 3,
+      "elevation": 1,
+      "state": 1
+    },
+    {
+      "id": "mir_shophouse",
+      "type": "mirror",
+      "x": 8,
+      "y": 6,
+      "elevation": 0,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_artist",
+      "who": "artist",
+      "x": 6,
+      "y": 4,
+      "elevation": 0,
+      "need": "SOFT_SHADE"
+    },
+    {
+      "id": "w_cat",
+      "who": "cat",
+      "x": 12,
+      "y": 5,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    }
+  ]
+}

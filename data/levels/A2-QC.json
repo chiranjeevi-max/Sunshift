@@ -1,0 +1,144 @@
+{
+  "id": "A2-QC",
+  "act": 2,
+  "title": "Tailor's Window",
+  "subtitle": "Tailor's Window · 5:20 PM",
+  "postcard_caption": "One golden thread crossed the whole courtyard and landed on the brass thimble.",
+  "grid_size": [
+    15,
+    10
+  ],
+  "initial_sun_angle": 3,
+  "player_spawn": [
+    2,
+    7
+  ],
+  "tiles": [
+    {
+      "x": 5,
+      "y": 5,
+      "type": "puddle",
+      "elevation": 0
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "type": "puddle",
+      "elevation": 0
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 10,
+      "y": 9,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 4,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 14,
+      "y": 3,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "type": "floor",
+      "elevation": 1
+    },
+    {
+      "x": 12,
+      "y": 3,
+      "type": "floor",
+      "elevation": 1
+    }
+  ],
+  "props": [
+    {
+      "id": "mir_tailor_a",
+      "type": "mirror",
+      "x": 3,
+      "y": 9,
+      "elevation": 0,
+      "state": 0
+    },
+    {
+      "id": "sh_tailor_a",
+      "type": "shutter",
+      "x": 7,
+      "y": 8,
+      "elevation": 1,
+      "state": 0
+    },
+    {
+      "id": "mir_tailor_b",
+      "type": "mirror",
+      "x": 10,
+      "y": 8,
+      "elevation": 0,
+      "state": 1
+    },
+    {
+      "id": "mir_tailor_c",
+      "type": "mirror",
+      "x": 10,
+      "y": 3,
+      "elevation": 0,
+      "state": 0
+    },
+    {
+      "id": "sh_tailor_b",
+      "type": "shutter",
+      "x": 12,
+      "y": 3,
+      "elevation": 1,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_thread",
+      "who": "bookbinder",
+      "x": 8,
+      "y": 8,
+      "elevation": 0,
+      "need": "SHARED_BEAM",
+      "targets": [
+        [
+          9,
+          8
+        ]
+      ]
+    },
+    {
+      "id": "w_thimble",
+      "who": "bookbinder",
+      "x": 13,
+      "y": 3,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    }
+  ]
+}

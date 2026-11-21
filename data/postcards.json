@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "postcards": [
+    {
+      "id": "A1-01",
+      "act": 1,
+      "who": "cat",
+      "title": "Ginger on Cold Stone",
+      "caption": "She found the one warm stone on the whole street and did not move for an hour."
+    },
+    {
+      "id": "A1-02",
+      "act": 1,
+      "who": "baker",
+      "title": "The Second Rise",
+      "caption": "The dough came up twice as fast on the warm ledge, and so did he."
+    },
+    {
+      "id": "A1-03",
+      "act": 1,
+      "who": "mother",
+      "title": "School Shirt",
+      "caption": "Dry by morning, from a beam nobody had thought worth looking for."
+    },
+    {
+      "id": "A1-04",
+      "act": 1,
+      "who": "mechanic",
+      "title": "The Small Gear",
+      "caption": "Sixty years of eyes, and the sun finally found the part that needed them."
+    },
+    {
+      "id": "A1-05",
+      "act": 1,
+      "who": "child",
+      "title": "Comic on the Stoop",
+      "caption": "He read the last page in the light, then read it again to make it last."
+    },
+    {
+      "id": "A1-06",
+      "act": 1,
+      "who": "guitarist",
+      "title": "Terrace Duet",
+      "caption": "One tuned a string. The other slept through it, which was the correct answer."
+    },
+    {
+      "id": "A1-QC",
+      "act": 1,
+      "who": "pigeon",
+      "title": "Rooftop Coop",
+      "caption": "Three birds, one ledge, no argument about who sat where."
+    },
+    {
+      "id": "A2-07",
+      "act": 2,
+      "who": "nurse",
+      "title": "Four Days of Night",
+      "caption": "She had not seen the sun since Thursday. She saw it now, and shut her eyes on purpose."
+    },
+    {
+      "id": "A2-08",
+      "act": 2,
+      "who": "elder_woman",
+      "title": "Up from the Puddle",
+      "caption": "The morning's rain came back as light for the tea."
+    },
+    {
+      "id": "A2-09",
+      "act": 2,
+      "who": "artist",
+      "title": "Wet Paper",
+      "caption": "The shade kept her colours honest. The cat kept the sun patch honest."
+    },
+    {
+      "id": "A2-10",
+      "act": 2,
+      "who": "mother",
+      "title": "Chilies and Peas",
+      "caption": "Half the lane dried red. The other half stayed cool enough to talk in."
+    },
+    {
+      "id": "A2-11",
+      "act": 2,
+      "who": "postman",
+      "title": "Sorting Light",
+      "caption": "Every envelope had a hand behind it. Out of the glare he could see them all again."
+    },
+    {
+      "id": "A2-12",
+      "act": 2,
+      "who": "shrine_lamp",
+      "title": "Banyan Shade",
+      "caption": "Three neighbours, one bench, and a lamp that kept its counsel until the puddle spoke."
+    },
+    {
+      "id": "A2-QC",
+      "act": 2,
+      "who": "bookbinder",
+      "title": "The Thimble",
+      "caption": "A golden thread across a courtyard, to a thimble small enough to miss it."
+    },
+    {
+      "id": "A3-13",
+      "act": 3,
+      "who": "elder_woman",
+      "title": "Wind Chime",
+      "caption": "The chime split the light the way it splits the wind: without asking."
+    },
+    {
+      "id": "A3-14",
+      "act": 3,
+      "who": "elder_man",
+      "title": "Matched Squares",
+      "caption": "Forty years of tea, and now the same patch of afternoon to drink it in."
+    },
+    {
+      "id": "A3-15",
+      "act": 3,
+      "who": "musician",
+      "title": "Cellar Music",
+      "caption": "He played by shade and listened by light."
+    },
+    {
+      "id": "A3-16",
+      "act": 3,
+      "who": "florist",
+      "title": "Camelia at Dusk",
+      "caption": "It opens only for rose-coloured light, which is a reasonable standard."
+    },
+    {
+      "id": "A3-17",
+      "act": 3,
+      "who": "bookbinder",
+      "title": "Pressed Flowers",
+      "caption": "One beam, two quiet jobs, and no need to choose between them."
+    },
+    {
+      "id": "A3-18",
+      "act": 3,
+      "who": "lantern_maker",
+      "title": "Three Windows",
+      "caption": "The bells rang across the water, and the arch answered in lamplight."
+    },
+    {
+      "id": "A3-QC",
+      "act": 3,
+      "who": "child",
+      "title": "Paper Boat",
+      "caption": "It went as far as the rose-gold reached, which was far enough."
+    },
+    {
+      "id": "A4-19",
+      "act": 4,
+      "who": "commuter",
+      "title": "Last Tram",
+      "caption": "The lantern held what the afternoon gave it, and gave it back at dusk."
+    },
+    {
+      "id": "A4-20",
+      "act": 4,
+      "who": "student",
+      "title": "Folded Warmth",
+      "caption": "Two shifts of the sun to warm a chair she had been sitting in all evening."
+    },
+    {
+      "id": "A4-21",
+      "act": 4,
+      "who": "astronomer",
+      "title": "First Star",
+      "caption": "Shade for the telescope, light for the stairs, and the sky did the rest."
+    },
+    {
+      "id": "A4-22",
+      "act": 4,
+      "who": "harbor_keeper",
+      "title": "Fog Coming In",
+      "caption": "Stored sun, carried up a staircase, spent on the way back down."
+    },
+    {
+      "id": "A4-23",
+      "act": 4,
+      "who": "florist",
+      "title": "Glasshouse",
+      "caption": "Rose-gold inside, indigo out, and not one leaf noticed the difference."
+    },
+    {
+      "id": "A4-24",
+      "act": 4,
+      "who": "elder_woman",
+      "title": "Supper",
+      "caption": "Everyone from every shift, one long table, one last light."
+    },
+    {
+      "id": "A4-QC",
+      "act": 4,
+      "who": "harbor_keeper",
+      "title": "Harbor Bell",
+      "caption": "One beam, kept all evening, rung once."
+    }
+  ]
+}

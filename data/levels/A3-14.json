@@ -1,0 +1,27 @@
+{
+  "id": "A3-14",
+  "act": 3,
+  "title": "Two Cups, One Alley",
+  "subtitle": "Opposing Balconies · 6:20 PM",
+  "postcard_caption": "They drank their tea at the same moment without ever having planned it.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 5,
+  "player_spawn": [2, 6],
+  "tiles": [
+    { "x": 9, "y": 0, "type": "wall", "elevation": 2 },
+    { "x": 9, "y": 1, "type": "wall", "elevation": 2 },
+    { "x": 9, "y": 3, "type": "wall", "elevation": 2 },
+    { "x": 9, "y": 4, "type": "wall", "elevation": 2 },
+    { "x": 9, "y": 5, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 12, "y": 6, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "mir_alley", "type": "mirror", "x": 4, "y": 2, "elevation": 0, "state": 1 },
+    { "id": "pri_balcony", "type": "prism", "x": 8, "y": 2, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_elder_woman", "who": "elder_woman", "x": 8, "y": 0, "elevation": 1, "need": "SHARED_BEAM", "targets": [[8, 4]] },
+    { "id": "w_cat", "who": "cat", "x": 3, "y": 6, "elevation": 0, "need": "SOFT_SHADE" }
+  ]
+}

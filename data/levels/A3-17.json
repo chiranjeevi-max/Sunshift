@@ -1,0 +1,28 @@
+{
+  "id": "A3-17",
+  "act": 3,
+  "title": "The Press and the Nook",
+  "subtitle": "Bookbinder's Canal · 7:00 PM",
+  "postcard_caption": "The canal threw one last shimmer and both the reading lamp and the flower press woke at once.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 7,
+  "player_spawn": [1, 8],
+  "tiles": [
+    { "x": 5, "y": 5, "type": "puddle" },
+    { "x": 5, "y": 1, "type": "floor", "elevation": 1 },
+    { "x": 2, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 10, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 11, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 9, "y": 0, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "pri_press", "type": "prism", "x": 3, "y": 3, "elevation": 0, "state": 0 },
+    { "id": "gla_press", "type": "stained_glass", "x": 4, "y": 2, "elevation": 1, "state": 0 },
+    { "id": "shu_sill", "type": "shutter", "x": 5, "y": 1, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_bookbinder", "who": "bookbinder", "x": 2, "y": 4, "elevation": 0, "need": "WARM_SUN" },
+    { "id": "w_press", "who": "florist", "x": 6, "y": 0, "elevation": 1, "need": "ROSE_LIGHT" }
+  ]
+}

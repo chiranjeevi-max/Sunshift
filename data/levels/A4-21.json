@@ -1,0 +1,24 @@
+{
+  "id": "A4-21",
+  "act": 4,
+  "title": "Setting Up in the Last Light",
+  "subtitle": "Viaduct Overpass · 8:10 PM",
+  "postcard_caption": "He found his star in the dark while the stair behind him kept a warm square of daylight.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 4,
+  "player_spawn": [1, 7],
+  "tiles": [
+    { "x": 5, "y": 5, "type": "floor", "elevation": 1 },
+    { "x": 8, "y": 3, "type": "puddle" },
+    { "x": 12, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 2, "y": 8, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "lan_stair", "type": "lantern", "x": 6, "y": 5, "elevation": 0, "state": 0 },
+    { "id": "awn_stair", "type": "awning", "x": 5, "y": 5, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_commuter", "who": "commuter", "x": 6, "y": 6, "elevation": 0, "need": "LANTERN_GLOW" },
+    { "id": "w_astronomer", "who": "astronomer", "x": 8, "y": 5, "elevation": 0, "need": "SOFT_SHADE" }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "id": "A1-03",
+  "act": 1,
+  "title": "Laundry Courtyard",
+  "subtitle": "Laundry Courtyard · 5:40 PM",
+  "postcard_caption": "The school shirt dried on the line without a single crease left in it.",
+  "grid_size": [
+    14,
+    9
+  ],
+  "initial_sun_angle": 7,
+  "player_spawn": [
+    2,
+    7
+  ],
+  "tiles": [
+    {
+      "x": 5,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 11,
+      "y": 3,
+      "type": "wall",
+      "elevation": 2
+    }
+  ],
+  "props": [
+    {
+      "id": "mir_line",
+      "type": "mirror",
+      "x": 5,
+      "y": 2,
+      "elevation": 0,
+      "state": 0
+    },
+    {
+      "id": "mir_hang",
+      "type": "mirror",
+      "x": 9,
+      "y": 3,
+      "elevation": 0,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_shirt",
+      "who": "child",
+      "x": 6,
+      "y": 2,
+      "elevation": 0,
+      "need": "SHARED_BEAM",
+      "targets": [
+        [
+          9,
+          2
+        ]
+      ]
+    },
+    {
+      "id": "w_linen",
+      "who": "mother",
+      "x": 10,
+      "y": 6,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    }
+  ]
+}

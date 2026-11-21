@@ -1,0 +1,108 @@
+{
+  "id": "A1-04",
+  "act": 1,
+  "title": "Bicycle Repair Yard",
+  "subtitle": "Bicycle Repair Yard · 6:10 PM",
+  "postcard_caption": "The old mechanic found the last gear of the evening and did not have to squint.",
+  "grid_size": [
+    14,
+    9
+  ],
+  "initial_sun_angle": 0,
+  "player_spawn": [
+    2,
+    7
+  ],
+  "tiles": [
+    {
+      "x": 6,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 10,
+      "y": 7,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 11,
+      "y": 7,
+      "type": "wall",
+      "elevation": 2
+    }
+  ],
+  "props": [
+    {
+      "id": "mir_parts",
+      "type": "mirror",
+      "x": 4,
+      "y": 7,
+      "elevation": 0,
+      "state": 0
+    },
+    {
+      "id": "mir_bench",
+      "type": "mirror",
+      "x": 9,
+      "y": 6,
+      "elevation": 0,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_gear",
+      "who": "mechanic",
+      "x": 8,
+      "y": 3,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    },
+    {
+      "id": "w_tray",
+      "who": "baker",
+      "x": 5,
+      "y": 6,
+      "elevation": 0,
+      "need": "SHARED_BEAM",
+      "targets": [
+        [
+          7,
+          6
+        ]
+      ]
+    }
+  ]
+}

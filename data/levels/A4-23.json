@@ -1,0 +1,30 @@
+{
+  "id": "A4-23",
+  "act": 4,
+  "title": "Rose Against Indigo",
+  "subtitle": "Glasshouse at Dusk · 8:40 PM",
+  "postcard_caption": "The hills outside went blue to the last ridge while the glasshouse kept one warm rose petal of the day.",
+  "grid_size": [16, 10],
+  "initial_sun_angle": 4,
+  "player_spawn": [1, 9],
+  "tiles": [
+    { "x": 3, "y": 4, "type": "floor", "elevation": 1 },
+    { "x": 10, "y": 2, "type": "floor", "elevation": 1 },
+    { "x": 9, "y": 2, "type": "floor", "elevation": 1 },
+    { "x": 13, "y": 9, "type": "wall", "elevation": 2 },
+    { "x": 14, "y": 9, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "lan_glass", "type": "lantern", "x": 4, "y": 4, "elevation": 0, "state": 0 },
+    { "id": "awn_glass", "type": "awning", "x": 3, "y": 4, "elevation": 1, "state": 0 },
+    { "id": "mir_gable", "type": "mirror", "x": 10, "y": 6, "elevation": 0, "state": 1 },
+    { "id": "pri_gable", "type": "prism", "x": 10, "y": 2, "elevation": 1, "state": 0 },
+    { "id": "gla_gable", "type": "stained_glass", "x": 9, "y": 2, "elevation": 1, "state": 0 },
+    { "id": "lan_bench", "type": "lantern", "x": 13, "y": 4, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_keeper", "who": "lantern_maker", "x": 4, "y": 5, "elevation": 0, "need": "LANTERN_GLOW" },
+    { "id": "w_florist", "who": "florist", "x": 6, "y": 4, "elevation": 0, "need": "SOFT_SHADE" },
+    { "id": "w_camelia", "who": "camelia", "x": 8, "y": 2, "elevation": 1, "need": "ROSE_LIGHT" }
+  ]
+}

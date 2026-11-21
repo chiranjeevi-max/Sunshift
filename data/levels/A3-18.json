@@ -1,0 +1,36 @@
+{
+  "id": "A3-18",
+  "act": 3,
+  "title": "Three Windows at the Bell",
+  "subtitle": "Lantern-Maker's Arch · 7:10 PM",
+  "postcard_caption": "Three windows came up together like a chord, and the bells had somewhere to land.",
+  "grid_size": [16, 10],
+  "initial_sun_angle": 7,
+  "player_spawn": [1, 9],
+  "tiles": [
+    { "x": 7, "y": 7, "type": "puddle" },
+    { "x": 6, "y": 2, "type": "floor", "elevation": 1 },
+    { "x": 4, "y": 6, "type": "floor", "elevation": 1 },
+    { "x": 2, "y": 6, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 6, "type": "wall", "elevation": 2 },
+    { "x": 2, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 4, "y": 7, "type": "wall", "elevation": 2 },
+    { "x": 2, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 3, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 4, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 12, "y": 9, "type": "wall", "elevation": 2 },
+    { "x": 13, "y": 9, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "pri_low", "type": "prism", "x": 5, "y": 5, "elevation": 0, "state": 0 },
+    { "id": "pri_high", "type": "prism", "x": 7, "y": 3, "elevation": 1, "state": 0 },
+    { "id": "awn_north", "type": "awning", "x": 6, "y": 2, "elevation": 1, "state": 1 },
+    { "id": "awn_west", "type": "awning", "x": 4, "y": 6, "elevation": 1, "state": 1 },
+    { "id": "gla_north", "type": "stained_glass", "x": 5, "y": 1, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_north", "who": "lantern_maker", "x": 4, "y": 0, "elevation": 1, "need": "ROSE_LIGHT" },
+    { "id": "w_east", "who": "elder_woman", "x": 8, "y": 4, "elevation": 1, "need": "SHARED_BEAM", "targets": [[9, 5]] },
+    { "id": "w_west", "who": "baker", "x": 3, "y": 7, "elevation": 0, "need": "WARM_SUN" }
+  ]
+}

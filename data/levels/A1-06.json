@@ -1,0 +1,122 @@
+{
+  "id": "A1-06",
+  "act": 1,
+  "title": "Terrace Fountain",
+  "subtitle": "Terrace Fountain · 6:35 PM",
+  "postcard_caption": "The guitar found its tuning above the fountain while the pup slept through the whole song.",
+  "grid_size": [
+    16,
+    10
+  ],
+  "initial_sun_angle": 7,
+  "player_spawn": [
+    2,
+    8
+  ],
+  "tiles": [
+    {
+      "x": 9,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 15,
+      "y": 4,
+      "type": "wall",
+      "elevation": 2
+    },
+    {
+      "x": 15,
+      "y": 5,
+      "type": "wall",
+      "elevation": 2
+    }
+  ],
+  "props": [
+    {
+      "id": "mir_yard",
+      "type": "mirror",
+      "x": 4,
+      "y": 6,
+      "elevation": 0,
+      "state": 0
+    },
+    {
+      "id": "mir_fountain",
+      "type": "mirror",
+      "x": 8,
+      "y": 6,
+      "elevation": 0,
+      "state": 0
+    },
+    {
+      "id": "mir_upper",
+      "type": "mirror",
+      "x": 8,
+      "y": 3,
+      "elevation": 0,
+      "state": 0
+    }
+  ],
+  "wishes": [
+    {
+      "id": "w_pup",
+      "who": "pup",
+      "x": 4,
+      "y": 7,
+      "elevation": 0,
+      "need": "SHARED_BEAM",
+      "targets": [
+        [
+          7,
+          7
+        ]
+      ]
+    },
+    {
+      "id": "w_guitar",
+      "who": "guitarist",
+      "x": 13,
+      "y": 2,
+      "elevation": 0,
+      "need": "WARM_SUN"
+    }
+  ]
+}

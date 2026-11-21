@@ -1,0 +1,34 @@
+{
+  "id": "A4-24",
+  "act": 4,
+  "title": "Neighborhood Supper",
+  "subtitle": "Cliffside Plaza · 9:00 PM",
+  "postcard_caption": "Every seat held a little of the same afternoon, and the whole table ate by it.",
+  "grid_size": [18, 11],
+  "initial_sun_angle": 4,
+  "player_spawn": [1, 10],
+  "tiles": [
+    { "x": 5, "y": 6, "type": "floor", "elevation": 1 },
+    { "x": 12, "y": 4, "type": "floor", "elevation": 1 },
+    { "x": 12, "y": 2, "type": "floor", "elevation": 1 },
+    { "x": 11, "y": 2, "type": "floor", "elevation": 1 },
+    { "x": 15, "y": 10, "type": "wall", "elevation": 2 },
+    { "x": 16, "y": 10, "type": "wall", "elevation": 2 },
+    { "x": 2, "y": 10, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "lan_table", "type": "lantern", "x": 6, "y": 6, "elevation": 0, "state": 0 },
+    { "id": "awn_table", "type": "awning", "x": 5, "y": 6, "elevation": 1, "state": 0 },
+    { "id": "mir_table", "type": "mirror", "x": 12, "y": 5, "elevation": 0, "state": 1 },
+    { "id": "shu_table", "type": "shutter", "x": 12, "y": 4, "elevation": 1, "state": 0 },
+    { "id": "pri_table", "type": "prism", "x": 12, "y": 2, "elevation": 1, "state": 0 },
+    { "id": "gla_table", "type": "stained_glass", "x": 11, "y": 2, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_commuter", "who": "commuter", "x": 6, "y": 7, "elevation": 0, "need": "LANTERN_GLOW" },
+    { "id": "w_nurse", "who": "nurse", "x": 8, "y": 6, "elevation": 0, "need": "SOFT_SHADE" },
+    { "id": "w_mother", "who": "mother", "x": 13, "y": 2, "elevation": 1, "need": "SHARED_BEAM", "targets": [[14, 2]] },
+    { "id": "w_camelia", "who": "camelia", "x": 10, "y": 2, "elevation": 1, "need": "ROSE_LIGHT" },
+    { "id": "w_baker", "who": "baker", "x": 9, "y": 1, "elevation": 1, "need": "WARM_SUN" }
+  ]
+}

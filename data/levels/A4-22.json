@@ -1,0 +1,29 @@
+{
+  "id": "A4-22",
+  "act": 4,
+  "title": "The Long Way Up",
+  "subtitle": "Harbor Lighthouse Steps · 8:25 PM",
+  "postcard_caption": "The light climbed the stairs one keeper at a time until the fog found it already waiting.",
+  "grid_size": [14, 9],
+  "initial_sun_angle": 4,
+  "player_spawn": [1, 8],
+  "tiles": [
+    { "x": 5, "y": 5, "type": "floor", "elevation": 1 },
+    { "x": 6, "y": 1, "type": "floor", "elevation": 1 },
+    { "x": 3, "y": 1, "type": "floor", "elevation": 1 },
+    { "x": 12, "y": 8, "type": "wall", "elevation": 2 },
+    { "x": 2, "y": 8, "type": "wall", "elevation": 2 }
+  ],
+  "props": [
+    { "id": "lan_keeper", "type": "lantern", "x": 6, "y": 5, "elevation": 0, "state": 0 },
+    { "id": "lan_relay", "type": "lantern", "x": 6, "y": 1, "elevation": 1, "state": 0 },
+    { "id": "awn_keeper", "type": "awning", "x": 5, "y": 5, "elevation": 1, "state": 0 },
+    { "id": "mir_gallery", "type": "mirror", "x": 3, "y": 3, "elevation": 0, "state": 1 },
+    { "id": "pri_lamp", "type": "prism", "x": 3, "y": 1, "elevation": 1, "state": 0 }
+  ],
+  "wishes": [
+    { "id": "w_keeper", "who": "harbor_keeper", "x": 6, "y": 6, "elevation": 0, "need": "LANTERN_GLOW" },
+    { "id": "w_postman", "who": "postman", "x": 8, "y": 5, "elevation": 0, "need": "SOFT_SHADE" },
+    { "id": "w_relay", "who": "mechanic", "x": 1, "y": 1, "elevation": 1, "need": "SHARED_BEAM", "targets": [[2, 1]] }
+  ]
+}
