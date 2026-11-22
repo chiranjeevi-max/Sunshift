@@ -11,9 +11,18 @@ config_version=5
 [application]
 
 config/name="Sunshift"
+run/main_scene="res://src/world/Main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
+
+[autoload]
+
+EventBus="*res://src/autoload/EventBus.gd"
+GameState="*res://src/autoload/GameState.gd"
+PaletteDirector="*res://src/autoload/PaletteDirector.gd"
+SaveManager="*res://src/autoload/SaveManager.gd"
+AudioSynth="*res://src/autoload/AudioSynth.gd"
 
 [debug]
 
