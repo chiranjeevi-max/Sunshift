@@ -96,14 +96,17 @@ static func _seed_for(district: int, stem: int) -> int:
 
 
 static func _ambience(buf: PackedFloat32Array, district: int, rng: RandomNumberGenerator) -> void:
-	# Paul Kellett's three-pole pink approximation over a one-pole low-pass: a
-	# breathy coastal bed rather than white hiss. Baked at 11 kHz and
-	# interpolated: the bed has nothing above ~600 Hz to lose.
+	# Adapted from the MIT-licensed mda TestTone pink-noise filter. See CREDITS.md.
+	# The noise bed runs at half rate because the final low-pass limits its bandwidth.
 	var half: int = FRAMES / 2
 	var low: PackedFloat32Array = PackedFloat32Array()
 	low.resize(half)
 	var b0: float = 0.0
 	var b1: float = 0.0
+	var b2: float = 0.0
+	var b3: float = 0.0
+	var b4: float = 0.0
+	var b5: float = 0.0
 	var lp: float = 0.0
 	var breath: float = 0.70
 	var period: float = float(half / 4)
@@ -113,9 +116,15 @@ static func _ambience(buf: PackedFloat32Array, district: int, rng: RandomNumberG
 	for i: int in half:
 		state = state * 1103515245 + 12345
 		var w: float = float((state >> 16) & 0x7FFF) * 0.0000610 - 1.0
-		b0 = 0.99765 * b0 + w * 0.0990460
-		b1 = 0.96300 * b1 + w * 0.2965164
-		lp += ((b0 + b1 + w * 0.1848) * 0.22 - lp) * 0.16
+		b0 = 0.997 * b0 + w * 0.029591
+		b1 = 0.985 * b1 + w * 0.032534
+		b2 = 0.950 * b2 + w * 0.048056
+		b3 = 0.850 * b3 + w * 0.090579
+		b4 = 0.620 * b4 + w * 0.108990
+		b5 = 0.250 * b5 + w * 0.255784
+		# Match the noise-bed level before mixing the district sounds.
+		var pink: float = (b0 + b1 + b2 + b3 + b4 + b5) * 0.592
+		lp += (pink - lp) * 0.16
 		if (i & 127) == 0:
 			breath += (0.70 + 0.30 * sin(TAU * float(i) / period) - breath) * 0.0025
 		low[i] = lp * breath
