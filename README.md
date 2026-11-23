@@ -1,5 +1,7 @@
 # Sunshift
 
+[Play Sunshift on itch.io](https://chiranjeevi-max.itch.io/sunshift)
+
 ![Gameplay](docs/gameplay.gif)
 
 Sunshift is a 2D puzzle game about guiding the last hour of daylight through four coastal districts. Play as Milo and shift the sun, turn mirrors, and move awnings to give each neighbour the light or shade they need.
