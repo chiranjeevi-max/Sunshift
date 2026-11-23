@@ -60,6 +60,10 @@ func _ready() -> void:
   EventBus.level_solved.connect(_on_level_solved)
 
 
+func _process(_delta: float) -> void:
+  _scan_gates()
+
+
 func _unhandled_input(event: InputEvent) -> void:
   if _entering:
     return
@@ -69,12 +73,18 @@ func _unhandled_input(event: InputEvent) -> void:
     _toggle_journal()
 
 
-func _process(_delta: float) -> void:
-  _scan_gates()
+## The next courtyard you have not solved, staying inside its district so the
+## acts are still experienced in order.
+func next_level_for(gate: DistrictGate) -> String:
+  for id: String in _level_ids_in_act(gate.act):
+    if not GameState.is_completed(id):
+      return id
+  var ids: Array[String] = _level_ids_in_act(gate.act)
+  return ids[0] if not ids.is_empty() else ""
 
 
 func _build_backdrop() -> void:
-  var sky := ColorRect.new()
+  var sky: ColorRect = ColorRect.new()
   sky.name = "SkyBackdrop"
   sky.position = Vector2.ZERO
   sky.size = Vector2(VIEW_W, VIEW_H)
@@ -92,11 +102,11 @@ func _build_world() -> void:
   )
   add_child(_world)
 
-  var tileset := _build_tileset()
+  var tileset: TileSet = _build_tileset()
   _ground = _new_layer("GroundLayer", tileset)
   _world.add_child(_ground)
 
-  var y_sort := Node2D.new()
+  var y_sort: Node2D = Node2D.new()
   y_sort.name = "YSortWorld"
   y_sort.y_sort_enabled = true
   _world.add_child(y_sort)
@@ -119,7 +129,7 @@ func _build_tileset() -> TileSet:
 
 
 func _new_layer(node_name: String, tileset: TileSet) -> TileMapLayer:
-  var layer := TileMapLayer.new()
+  var layer: TileMapLayer = TileMapLayer.new()
   layer.name = node_name
   layer.tile_set = tileset
   layer.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -130,14 +140,14 @@ func _new_layer(node_name: String, tileset: TileSet) -> TileMapLayer:
 ## railings, so without this the tram line and the sea are both open ground and
 ## Milo walks off the map behind the window.
 func _build_bounds() -> void:
-  var body := StaticBody2D.new()
+  var body: StaticBody2D = StaticBody2D.new()
   body.name = "HubBounds"
   body.collision_layer = 1
   body.collision_mask = 0
   _world.add_child(body)
   for rect: Rect2 in _solid_rects():
-    var shape := CollisionShape2D.new()
-    var box := RectangleShape2D.new()
+    var shape: CollisionShape2D = CollisionShape2D.new()
+    var box: RectangleShape2D = RectangleShape2D.new()
     box.size = rect.size
     shape.shape = box
     shape.position = rect.position + rect.size * 0.5
@@ -230,7 +240,7 @@ func _is_doorway(x: int) -> bool:
 
 func _build_gates() -> void:
   for index: int in GATE_COLUMNS.size():
-    var gate := DistrictGate.new()
+    var gate: DistrictGate = DistrictGate.new()
     gate.name = "Gate%d" % index
     gate.configure(index, GATE_MOTIFS[index])
     gate.position = Vector2(
@@ -318,10 +328,10 @@ func _refresh() -> void:
 func _apply_palette() -> void:
   # The hub takes the sea's dusk grade but stays a touch cooler than any
   # district, so stepping through a gate feels like the sun coming up.
-  var sky := get_node_or_null("SkyBackdrop") as ColorRect
+  var sky: ColorRect = get_node_or_null("SkyBackdrop") as ColorRect
   if sky == null:
     return
-  var palette := PixelCanvas.load_palette(HUB_DISTRICT)
+  var palette: PixelCanvas.Palette = PixelCanvas.load_palette(HUB_DISTRICT)
   var top: Color = palette.twilight[0] if not palette.twilight.is_empty() else sky.color
   sky.color = Color(top.r * 0.55, top.g * 0.60, top.b * 0.85)
 
@@ -341,16 +351,6 @@ func _solved_in_act(act: int) -> int:
     if GameState.is_completed(id):
       count += 1
   return count
-
-
-## The next courtyard you have not solved, staying inside its district so the
-## acts are still experienced in order.
-func next_level_for(gate: DistrictGate) -> String:
-  for id: String in _level_ids_in_act(gate.act):
-    if not GameState.is_completed(id):
-      return id
-  var ids: Array[String] = _level_ids_in_act(gate.act)
-  return ids[0] if not ids.is_empty() else ""
 
 
 func _enter(gate: DistrictGate) -> void:
@@ -383,7 +383,7 @@ func _toggle_journal() -> void:
   var built: Variant = script.new()
   if not (built is Node):
     return
-  var layer := CanvasLayer.new()
+  var layer: CanvasLayer = CanvasLayer.new()
   layer.name = "JournalLayer"
   layer.layer = 5
   add_child(layer)
@@ -393,7 +393,7 @@ func _toggle_journal() -> void:
 func _find_main() -> Main:
   var node: Node = get_parent()
   while node != null:
-    var main := node as Main
+    var main: Main = node as Main
     if main != null:
       return main
     node = node.get_parent()

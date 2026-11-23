@@ -15,18 +15,18 @@ static func from_height(img: Image, strength: float = 2.0) -> Image:
 	var h: int = img.get_height()
 	var out: Image = Image.create_empty(w, h, false, Image.FORMAT_RGBA8)
 	out.fill(Color(0.5, 0.5, 1.0, 0.0))
-	var heights := PackedFloat32Array()
+	var heights: PackedFloat32Array = PackedFloat32Array()
 	heights.resize(w * h)
-	for y in h:
-		for x in w:
+	for y: int in h:
+		for x: int in w:
 			var c: Color = img.get_pixel(x, y)
 			if c.a <= 0.02:
 				heights[y * w + x] = 0.0
 			else:
 				heights[y * w + x] = (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) * c.a
 	var scale: float = maxf(0.01, strength)
-	for y in h:
-		for x in w:
+	for y: int in h:
+		for x: int in w:
 			var c: Color = img.get_pixel(x, y)
 			if c.a <= 0.02:
 				out.set_pixel(x, y, Color(0.5, 0.5, 1.0, 1.0))
@@ -60,8 +60,8 @@ static func height_from_diffuse(diffuse: Image) -> Image:
 	var w: int = diffuse.get_width()
 	var h: int = diffuse.get_height()
 	var out: Image = Image.create_empty(w, h, false, Image.FORMAT_RGBA8)
-	for y in h:
-		for x in w:
+	for y: int in h:
+		for x: int in w:
 			var c: Color = diffuse.get_pixel(x, y)
 			var lum: float = c.r * 0.299 + c.g * 0.587 + c.b * 0.114
 			out.set_pixel(x, y, Color(lum, lum, lum, c.a))
@@ -74,8 +74,8 @@ static func specular_from_diffuse(diffuse: Image) -> Image:
 	var w: int = diffuse.get_width()
 	var h: int = diffuse.get_height()
 	var out: Image = Image.create_empty(w, h, false, Image.FORMAT_RGBA8)
-	for y in h:
-		for x in w:
+	for y: int in h:
+		for x: int in w:
 			var c: Color = diffuse.get_pixel(x, y)
 			if c.a <= 0.02:
 				out.set_pixel(x, y, Color(0.0, 0.0, 0.0, 0.0))
@@ -92,7 +92,7 @@ static func specular_from_diffuse(diffuse: Image) -> Image:
 
 ## Assembles the three maps Godot needs for lit 2D pixel art.
 static func make_canvas_texture(diffuse: Image, normal_strength: float = 2.0) -> CanvasTexture:
-	var texture := CanvasTexture.new()
+	var texture: CanvasTexture = CanvasTexture.new()
 	texture.diffuse_texture = ImageTexture.create_from_image(diffuse)
 	texture.normal_texture = ImageTexture.create_from_image(from_height(diffuse, normal_strength))
 	texture.specular_texture = ImageTexture.create_from_image(specular_from_diffuse(diffuse))

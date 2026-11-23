@@ -26,24 +26,6 @@ func _ready() -> void:
   _adopt_save()
 
 
-## Completion and postcards live in the save file. Pull them in once at boot so
-## a returning player sees the promenade lit and the journal filled.
-func _adopt_save() -> void:
-  var save: Node = get_node_or_null("/root/SaveManager")
-  if save == null:
-    return
-  var saved_completed: Variant = save.get("completed_levels")
-  if saved_completed is Dictionary:
-    for level_id: Variant in (saved_completed as Dictionary).keys():
-      completed[str(level_id)] = true
-  var saved_cards: Variant = save.get("unlocked_postcards")
-  if saved_cards is Array:
-    for card: Variant in saved_cards as Array:
-      var id: String = str(card)
-      if not id.is_empty() and not unlocked_postcards.has(id):
-        unlocked_postcards.append(id)
-
-
 func has_level() -> bool:
   return current_level != null and current_state != null
 
@@ -54,7 +36,7 @@ func is_completed(level_id: String) -> bool:
 
 func load_level(level_id: String) -> void:
   var path: String = "%s/%s.json" % [LEVEL_DIR, level_id]
-  var level := LevelData.from_json(path)
+  var level: LevelData = LevelData.from_json(path)
   if level == null:
     push_error("GameState.load_level: cannot load %s" % path)
     return
@@ -171,6 +153,24 @@ func evaluate() -> LightSolver.SolveResult:
     _on_solved()
   _was_solved = result.solved
   return result
+
+
+## Completion and postcards live in the save file. Pull them in once at boot so
+## a returning player sees the promenade lit and the journal filled.
+func _adopt_save() -> void:
+  var save: Node = get_node_or_null("/root/SaveManager")
+  if save == null:
+    return
+  var saved_completed: Variant = save.get("completed_levels")
+  if saved_completed is Dictionary:
+    for level_id: Variant in (saved_completed as Dictionary).keys():
+      completed[str(level_id)] = true
+  var saved_cards: Variant = save.get("unlocked_postcards")
+  if saved_cards is Array:
+    for card: Variant in saved_cards as Array:
+      var id: String = str(card)
+      if not id.is_empty() and not unlocked_postcards.has(id):
+        unlocked_postcards.append(id)
 
 
 func _on_solved() -> void:

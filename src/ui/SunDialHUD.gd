@@ -1,9 +1,7 @@
 class_name SunDialHUD
 extends Control
 
-## The brass horizon compass. Eight sun positions ride a shallow arc across the
-## top of the screen; the current one is a bright notch. Below it sit the wish
-## pips and, when a prop is within reach, a single "E" glyph. Nothing else.
+## Displays the current sun angle, wish progress, and the interaction prompt.
 
 const VIEW_W: int = 480
 const VIEW_H: int = 270
@@ -77,6 +75,11 @@ func _unhandled_input(event: InputEvent) -> void:
   if _pause_menu != null and _pause_menu.has_method("open"):
     _pause_menu.call("open")
     get_viewport().set_input_as_handled()
+
+
+func _draw() -> void:
+  _draw_dial()
+  _draw_prompt()
 
 
 ## Shows or hides the one-glyph interact hint. Polled from the player each 100 ms
@@ -158,11 +161,6 @@ func _arc_point(angle: float, radius: float) -> Vector2:
   return ARC_CENTRE + Vector2(cos(angle), sin(angle)) * radius
 
 
-func _draw() -> void:
-  _draw_dial()
-  _draw_prompt()
-
-
 func _draw_dial() -> void:
   var start: float = -PI * 0.5 - ARC_HALF_SPAN
   var end: float = -PI * 0.5 + ARC_HALF_SPAN
@@ -191,20 +189,17 @@ func _draw_dial() -> void:
   draw_circle(seat, 2.0, Color(1.0, 0.98, 0.90))
 
 
-## A spacebar, drawn as a key cap rather than typed. The prompt used to print the
-## letter "E", which is the key that turns the sun -- following the hint rotated
-## the light instead of touching the fixture. A drawn glyph also keeps the plate
-## off the vector font, which is the only blurred text in the game.
+## Draws the Space keycap at viewport resolution to keep its edges crisp.
 func _draw_prompt() -> void:
   if _prompt_alpha <= 0.02:
     return
   var bob: float = roundf(sin(_prompt_phase * 2.4) * 1.3) if _sway else 0.0
   var centre: Vector2 = (PROMPT_CENTRE + Vector2(0.0, bob)).round()
-  var plate := Rect2(centre - (PROMPT_WIDE * 0.5).floor(), PROMPT_WIDE)
+  var plate: Rect2 = Rect2(centre - (PROMPT_WIDE * 0.5).floor(), PROMPT_WIDE)
   var backing: float = 0.92 if _contrast else 0.78
   draw_rect(plate.grow(1.0), Color(BRASS_DARK, backing * _prompt_alpha))
   draw_rect(plate, Color(0.11, 0.08, 0.06, backing * _prompt_alpha))
   draw_rect(plate, Color(BRASS_LIGHT, 0.75 * _prompt_alpha), false, 1.0)
-  var bar := Rect2(plate.position + Vector2(4.0, 6.0), Vector2(plate.size.x - 8.0, 2.0))
+  var bar: Rect2 = Rect2(plate.position + Vector2(4.0, 6.0), Vector2(plate.size.x - 8.0, 2.0))
   draw_rect(bar, Color(CREAM, _prompt_alpha))
   draw_rect(Rect2(bar.position + Vector2(0.0, 1.0), bar.size), Color(BRASS, 0.45 * _prompt_alpha))

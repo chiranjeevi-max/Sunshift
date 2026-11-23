@@ -4,31 +4,7 @@ extends RefCounted
 ## One courtyard, parsed from JSON (data/levels/*.json) into flat O(1) lookup tables.
 ## Pure data: no nodes, no globals, no randomness.
 
-class TileSpec extends RefCounted:
-  var x: int = 0
-  var y: int = 0
-  var type: int = GridTypes.TileType.FLOOR
-  var elevation: int = 0
-
-
-class PropSpec extends RefCounted:
-  var id: String = ""
-  var type: int = GridTypes.PropType.MIRROR
-  var x: int = 0
-  var y: int = 0
-  var elevation: int = 0
-  var state: int = 0
-
-
-class WishSpec extends RefCounted:
-  var id: String = ""
-  var who: String = ""
-  var x: int = 0
-  var y: int = 0
-  var elevation: int = 0
-  var need: int = GridTypes.WishType.WARM_SUN
-  var targets: Array[Vector2i] = []
-
+const _INVALID_CELL: Vector2i = Vector2i(-999999, -999999)
 
 var id: String = ""
 var act: int = 1
@@ -47,15 +23,13 @@ var _tiles: Array[TileSpec] = []
 var _props_at: Dictionary[Vector2i, PropSpec] = {}
 var _props_by_id: Dictionary[String, PropSpec] = {}
 
-const _INVALID_CELL: Vector2i = Vector2i(-999999, -999999)
 
-
-## Returns null and prints one clear line on any schema violation.
+## Rejects invalid level data with a diagnostic for the level author.
 static func from_dict(d: Dictionary, source: String) -> LevelData:
   var id_value: Variant = d.get("id", null)
   if not (id_value is String) or String(id_value).strip_edges().is_empty():
     return _reject(source, "missing or empty \"id\"")
-  var level := LevelData.new()
+  var level: LevelData = LevelData.new()
   level.id = String(id_value)
   var act_value: Variant = d.get("act", null)
   if not _is_number(act_value):
@@ -80,7 +54,7 @@ static func from_dict(d: Dictionary, source: String) -> LevelData:
   if int(sun_value) < 0 or int(sun_value) > 7:
     return _reject(source, "\"initial_sun_angle\" must be 0..7")
   level.initial_sun_angle = int(sun_value)
-  var spawn := _vec2(d.get("player_spawn", null))
+  var spawn: Vector2i = _vec2(d.get("player_spawn", null))
   if spawn == _INVALID_CELL:
     return _reject(source, "\"player_spawn\" must be [x, y]")
   if not level.in_bounds(spawn.x, spawn.y):
@@ -130,7 +104,7 @@ static func from_dict(d: Dictionary, source: String) -> LevelData:
     var prop_id_value: Variant = entry.get("id", null)
     if not (prop_id_value is String) or String(prop_id_value).strip_edges().is_empty():
       return _reject(source, "prop entry is missing string \"id\"")
-    var prop := PropSpec.new()
+    var prop: PropSpec = PropSpec.new()
     prop.id = String(prop_id_value)
     if level._props_by_id.has(prop.id):
       return _reject(source, "duplicate prop id \"%s\"" % prop.id)
@@ -174,7 +148,7 @@ static func from_dict(d: Dictionary, source: String) -> LevelData:
     var wish_id_value: Variant = entry.get("id", null)
     if not (wish_id_value is String) or String(wish_id_value).strip_edges().is_empty():
       return _reject(source, "wish entry is missing string \"id\"")
-    var wish := WishSpec.new()
+    var wish: WishSpec = WishSpec.new()
     wish.id = String(wish_id_value)
     for other: WishSpec in level.wishes:
       if other.id == wish.id:
@@ -204,7 +178,7 @@ static func from_dict(d: Dictionary, source: String) -> LevelData:
     if not (targets_value is Array):
       return _reject(source, "wish \"%s\" has non-array \"targets\"" % wish.id)
     for target_value: Variant in (targets_value as Array):
-      var target := _vec2(target_value)
+      var target: Vector2i = _vec2(target_value)
       if target == _INVALID_CELL:
         return _reject(source, "wish \"%s\" has a malformed target" % wish.id)
       if not level.in_bounds(target.x, target.y):
@@ -229,6 +203,31 @@ static func from_json(path: String) -> LevelData:
   if not (parsed is Dictionary):
     return _reject(path, "top level is not a JSON object")
   return from_dict(parsed as Dictionary, path)
+
+
+static func _reject(source: String, message: String) -> LevelData:
+  push_warning("LevelData: %s: %s" % [source, message])
+  return null
+
+
+static func _is_number(value: Variant) -> bool:
+  return typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT
+
+
+static func _string_field(d: Dictionary, key: String, fallback: String) -> String:
+  var value: Variant = d.get(key, fallback)
+  if value is String:
+    return String(value)
+  return fallback
+
+
+static func _vec2(value: Variant) -> Vector2i:
+  if not (value is Array):
+    return _INVALID_CELL
+  var arr: Array = value as Array
+  if arr.size() != 2 or not _is_number(arr[0]) or not _is_number(arr[1]):
+    return _INVALID_CELL
+  return Vector2i(int(arr[0]), int(arr[1]))
 
 
 func in_bounds(x: int, y: int) -> bool:
@@ -294,7 +293,7 @@ func _allocate_tiles() -> void:
   _tiles.resize(width * height)
   for y: int in height:
     for x: int in width:
-      var tile := TileSpec.new()
+      var tile: TileSpec = TileSpec.new()
       tile.x = x
       tile.y = y
       tile.type = GridTypes.TileType.FLOOR
@@ -302,26 +301,27 @@ func _allocate_tiles() -> void:
       _tiles[y * width + x] = tile
 
 
-static func _reject(source: String, message: String) -> LevelData:
-  print("[LevelData] %s: %s" % [source, message])
-  return null
+class TileSpec extends RefCounted:
+  var x: int = 0
+  var y: int = 0
+  var type: int = GridTypes.TileType.FLOOR
+  var elevation: int = 0
 
 
-static func _is_number(value: Variant) -> bool:
-  return typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT
+class PropSpec extends RefCounted:
+  var id: String = ""
+  var type: int = GridTypes.PropType.MIRROR
+  var x: int = 0
+  var y: int = 0
+  var elevation: int = 0
+  var state: int = 0
 
 
-static func _string_field(d: Dictionary, key: String, fallback: String) -> String:
-  var value: Variant = d.get(key, fallback)
-  if value is String:
-    return String(value)
-  return fallback
-
-
-static func _vec2(value: Variant) -> Vector2i:
-  if not (value is Array):
-    return _INVALID_CELL
-  var arr: Array = value as Array
-  if arr.size() != 2 or not _is_number(arr[0]) or not _is_number(arr[1]):
-    return _INVALID_CELL
-  return Vector2i(int(arr[0]), int(arr[1]))
+class WishSpec extends RefCounted:
+  var id: String = ""
+  var who: String = ""
+  var x: int = 0
+  var y: int = 0
+  var elevation: int = 0
+  var need: int = GridTypes.WishType.WARM_SUN
+  var targets: Array[Vector2i] = []

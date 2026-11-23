@@ -42,18 +42,18 @@ func _ready() -> void:
   set_process(false)
 
 
-func _exit_tree() -> void:
-  var tree: SceneTree = get_tree()
-  if tree != null:
-    tree.paused = false
-
-
 func _unhandled_input(event: InputEvent) -> void:
   if not visible:
     return
   if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
     close()
     get_viewport().set_input_as_handled()
+
+
+func _exit_tree() -> void:
+  var tree: SceneTree = get_tree()
+  if tree != null:
+    tree.paused = false
 
 
 func is_open() -> bool:
@@ -87,8 +87,6 @@ func toggle() -> void:
     open()
 
 
-# --- BUILD -------------------------------------------------------------------
-
 func _build() -> void:
   _veil = ColorRect.new()
   _veil.name = "Veil"
@@ -116,11 +114,11 @@ func _build() -> void:
 
   _column.add_child(_make_label("The sun waits", 17))
 
-  var split := HBoxContainer.new()
+  var split: HBoxContainer = HBoxContainer.new()
   split.add_theme_constant_override("separation", 12)
   _column.add_child(split)
 
-  var sound := VBoxContainer.new()
+  var sound: VBoxContainer = VBoxContainer.new()
   sound.add_theme_constant_override("separation", 3)
   sound.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   split.add_child(sound)
@@ -128,7 +126,7 @@ func _build() -> void:
   for i: int in AUDIO_BUSES.size():
     sound.add_child(_build_slider_row(AUDIO_BUSES[i], AUDIO_LABELS[i]))
 
-  var comfort := VBoxContainer.new()
+  var comfort: VBoxContainer = VBoxContainer.new()
   comfort.add_theme_constant_override("separation", 1)
   comfort.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   split.add_child(comfort)
@@ -136,7 +134,7 @@ func _build() -> void:
   for i: int in FLAG_KEYS.size():
     comfort.add_child(_build_toggle(FLAG_KEYS[i], FLAG_LABELS[i]))
 
-  var buttons := HBoxContainer.new()
+  var buttons: HBoxContainer = HBoxContainer.new()
   buttons.add_theme_constant_override("separation", 6)
   _column.add_child(buttons)
   buttons.add_child(_build_button("Resume", _on_resume_pressed))
@@ -152,13 +150,13 @@ func _build() -> void:
 
 
 func _build_slider_row(bus: String, label_text: String) -> HBoxContainer:
-  var row := HBoxContainer.new()
+  var row: HBoxContainer = HBoxContainer.new()
   row.add_theme_constant_override("separation", 6)
-  var label := _make_label(label_text, 14)
+  var label: Label = _make_label(label_text, 14)
   label.custom_minimum_size = Vector2(74.0, 0.0)
   row.add_child(label)
 
-  var slider := HSlider.new()
+  var slider: HSlider = HSlider.new()
   slider.min_value = 0.0
   slider.max_value = 1.0
   slider.step = 0.05
@@ -173,7 +171,7 @@ func _build_slider_row(bus: String, label_text: String) -> HBoxContainer:
 
 
 func _build_toggle(key: String, label_text: String) -> CheckButton:
-  var check := CheckButton.new()
+  var check: CheckButton = CheckButton.new()
   check.text = label_text
   check.custom_minimum_size = Vector2(0.0, 20.0)
   check.add_theme_font_override("font", ThemeDB.fallback_font)
@@ -186,7 +184,7 @@ func _build_toggle(key: String, label_text: String) -> CheckButton:
 
 
 func _build_button(text: String, action: Callable) -> Button:
-  var button := Button.new()
+  var button: Button = Button.new()
   button.text = text
   button.custom_minimum_size = Vector2(0.0, 22.0)
   button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -204,7 +202,7 @@ func _build_button(text: String, action: Callable) -> Button:
 
 
 func _button_box(fill: Color, edge: Color) -> StyleBoxFlat:
-  var box := StyleBoxFlat.new()
+  var box: StyleBoxFlat = StyleBoxFlat.new()
   box.bg_color = fill
   box.border_color = edge
   box.set_border_width_all(1)
@@ -214,7 +212,7 @@ func _button_box(fill: Color, edge: Color) -> StyleBoxFlat:
 
 
 func _make_label(text: String, size_px: int, colour: Color = CREAM) -> Label:
-  var label := Label.new()
+  var label: Label = Label.new()
   label.text = text
   label.mouse_filter = Control.MOUSE_FILTER_IGNORE
   label.add_theme_font_override("font", ThemeDB.fallback_font)
@@ -235,15 +233,13 @@ func _fit_panel() -> void:
 
 
 func _style_panel() -> void:
-  var style := StyleBoxFlat.new()
+  var style: StyleBoxFlat = StyleBoxFlat.new()
   style.bg_color = Color(PAPER, 0.98 if _contrast else 0.94)
   style.border_color = Color(BRASS_LIGHT, 0.95) if _contrast else Color(BRASS, 0.7)
   style.set_border_width_all(2 if _contrast else 1)
   style.set_corner_radius_all(2)
   _panel.add_theme_stylebox_override("panel", style)
 
-
-# --- BINDINGS ----------------------------------------------------------------
 
 func _refresh_controls() -> void:
   for bus: String in _sliders:

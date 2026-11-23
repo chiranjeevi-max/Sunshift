@@ -4,14 +4,14 @@ extends CharacterBody2D
 ## Milo. Movement and proximity only: every action the player takes is routed
 ## through GameState, which owns the authoritative simulation state.
 
+signal interact_requested(prop_id: String)
+
 const CELL: int = 16
 const SPEED: float = 72.0
 const ACCEL_TIME: float = 0.08
 const FRICTION_TIME: float = 0.06
 const INTERACT_RADIUS: float = 22.0
 const CHARACTER_SPRITES_PATH: String = "res://src/art/CharacterSpriteGen.gd"
-
-signal interact_requested(prop_id: String)
 
 var facing: String = "down"
 var target: InteractiveProp = null
@@ -29,8 +29,8 @@ func _ready() -> void:
   _build_sprite()
 
 
-func place_at_cell(cell: Vector2i) -> void:
-  position = Vector2(cell.x * CELL + CELL / 2, cell.y * CELL + CELL / 2)
+func _process(_delta: float) -> void:
+  _scan_for_target()
 
 
 func _physics_process(delta: float) -> void:
@@ -46,8 +46,8 @@ func _physics_process(delta: float) -> void:
   _update_animation(input)
 
 
-func _process(_delta: float) -> void:
-  _scan_for_target()
+func place_at_cell(cell: Vector2i) -> void:
+  position = Vector2(cell.x * CELL + CELL / 2, cell.y * CELL + CELL / 2)
 
 
 func nearest_prop() -> InteractiveProp:
@@ -58,7 +58,7 @@ func _scan_for_target() -> void:
   var best: InteractiveProp = null
   var best_distance: float = INTERACT_RADIUS
   for node: Node in get_tree().get_nodes_in_group("interactable"):
-    var prop := node as InteractiveProp
+    var prop: InteractiveProp = node as InteractiveProp
     if prop == null or not is_instance_valid(prop):
       continue
     var distance: float = position.distance_to(prop.position)
@@ -107,8 +107,8 @@ func _build_sprite() -> void:
 
 
 func _build_collision() -> void:
-  var shape := CollisionShape2D.new()
-  var circle := CircleShape2D.new()
+  var shape: CollisionShape2D = CollisionShape2D.new()
+  var circle: CircleShape2D = CircleShape2D.new()
   circle.radius = 5.0
   shape.shape = circle
   shape.position = Vector2(0, 4)
@@ -125,7 +125,7 @@ func _frames() -> SpriteFrames:
 
 
 func _fallback_frames() -> SpriteFrames:
-  var frames := SpriteFrames.new()
+  var frames: SpriteFrames = SpriteFrames.new()
   var img: Image = Image.create(CELL, CELL + 8, false, Image.FORMAT_RGBA8)
   img.fill(Color(0.36, 0.28, 0.42, 1.0))
   var tex: ImageTexture = ImageTexture.create_from_image(img)

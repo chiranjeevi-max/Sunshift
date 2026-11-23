@@ -4,57 +4,8 @@ extends RefCounted
 ## Deterministic four-pass light solver: sun shadows, beams, lanterns, wishes.
 ## Pure and static — the same code runs in gameplay and in the headless BFS.
 
-class BeamSegment extends RefCounted:
-  var from: Vector2i = Vector2i.ZERO
-  var to: Vector2i = Vector2i.ZERO
-  var wavelength: int = GridTypes.LightType.BEAM_AMBER
-
-  func _init(p_from: Vector2i, p_to: Vector2i, p_wavelength: int) -> void:
-    from = p_from
-    to = p_to
-    wavelength = p_wavelength
-
-
-class SolveResult extends RefCounted:
-  var light: PackedInt32Array = PackedInt32Array()
-  var wish_states: Dictionary[String, bool] = {}
-  var satisfied_count: int = 0
-  var total_wishes: int = 0
-  var warmth_factor: float = 0.0
-  var solved: bool = false
-  var beams: Array[BeamSegment] = []
-  var next_lantern_charge: Dictionary[String, int] = {}
-  var lit_by_beam: Dictionary[String, bool] = {}
-  var glowing_lanterns: Dictionary[String, bool] = {}
-  var width: int = 0
-  var height: int = 0
-
-  func light_at(x: int, y: int) -> int:
-    if x < 0 or y < 0 or x >= width or y >= height:
-      return GridTypes.LightType.NONE
-    var idx: int = y * width + x
-    if idx < 0 or idx >= light.size():
-      return GridTypes.LightType.NONE
-    return light[idx]
-
-
-class _Ray extends RefCounted:
-  var origin: Vector2i = Vector2i.ZERO
-  var dir: Vector2i = Vector2i.ZERO
-  var wavelength: int = GridTypes.LightType.BEAM_AMBER
-  var bounces: int = 0
-  var max_steps: int = GridTypes.MAX_RAY_STEPS
-
-  func _init(p_origin: Vector2i, p_dir: Vector2i, p_wavelength: int, p_bounces: int, p_max_steps: int) -> void:
-    origin = p_origin
-    dir = p_dir
-    wavelength = p_wavelength
-    bounces = p_bounces
-    max_steps = p_max_steps
-
-
 static func solve(level: LevelData, state: SimState, collect_beams: bool = true) -> SolveResult:
-  var result := SolveResult.new()
+  var result: SolveResult = SolveResult.new()
   if level == null or state == null:
     return result
   var w: int = level.width
@@ -63,7 +14,7 @@ static func solve(level: LevelData, state: SimState, collect_beams: bool = true)
   result.height = h
   if w <= 0 or h <= 0:
     return result
-  var light := PackedInt32Array()
+  var light: PackedInt32Array = PackedInt32Array()
   light.resize(w * h)
   light.fill(GridTypes.LightType.NONE)
 
@@ -278,3 +229,52 @@ static func _light_at(light: PackedInt32Array, w: int, h: int, x: int, y: int) -
   if x < 0 or y < 0 or x >= w or y >= h:
     return GridTypes.LightType.NONE
   return light[y * w + x]
+
+
+class BeamSegment extends RefCounted:
+  var from: Vector2i = Vector2i.ZERO
+  var to: Vector2i = Vector2i.ZERO
+  var wavelength: int = GridTypes.LightType.BEAM_AMBER
+
+  func _init(p_from: Vector2i, p_to: Vector2i, p_wavelength: int) -> void:
+    from = p_from
+    to = p_to
+    wavelength = p_wavelength
+
+
+class SolveResult extends RefCounted:
+  var light: PackedInt32Array = PackedInt32Array()
+  var wish_states: Dictionary[String, bool] = {}
+  var satisfied_count: int = 0
+  var total_wishes: int = 0
+  var warmth_factor: float = 0.0
+  var solved: bool = false
+  var beams: Array[BeamSegment] = []
+  var next_lantern_charge: Dictionary[String, int] = {}
+  var lit_by_beam: Dictionary[String, bool] = {}
+  var glowing_lanterns: Dictionary[String, bool] = {}
+  var width: int = 0
+  var height: int = 0
+
+  func light_at(x: int, y: int) -> int:
+    if x < 0 or y < 0 or x >= width or y >= height:
+      return GridTypes.LightType.NONE
+    var idx: int = y * width + x
+    if idx < 0 or idx >= light.size():
+      return GridTypes.LightType.NONE
+    return light[idx]
+
+
+class _Ray extends RefCounted:
+  var origin: Vector2i = Vector2i.ZERO
+  var dir: Vector2i = Vector2i.ZERO
+  var wavelength: int = GridTypes.LightType.BEAM_AMBER
+  var bounces: int = 0
+  var max_steps: int = GridTypes.MAX_RAY_STEPS
+
+  func _init(p_origin: Vector2i, p_dir: Vector2i, p_wavelength: int, p_bounces: int, p_max_steps: int) -> void:
+    origin = p_origin
+    dir = p_dir
+    wavelength = p_wavelength
+    bounces = p_bounces
+    max_steps = p_max_steps

@@ -69,34 +69,6 @@ const PROP_SATCHEL: int = 13
 const PROP_FLUTE: int = 14
 const PROP_BUNDLE: int = 15
 
-## Body-plan knobs. One archetype = one Figure; silhouettes differ by
-## proportion (head size, shoulder width, hem height, leg weight) before colour.
-class Figure:
-	var skin: int = PixelCanvas.MAT_SKIN
-	var coat: int = PixelCanvas.MAT_CLOTH
-	var accent: int = PixelCanvas.MAT_CLAY
-	var hair: int = PixelCanvas.MAT_WOOD
-	var district: int = 0
-
-	var head_w: int = 6
-	var head_h: int = 7
-	var head_y: int = 2
-	var shoulder_w: int = 9
-	var hip_w: int = 7
-	var hem_y: int = 18
-	var leg_w: int = 2
-	var leg_gap: int = 1
-	var boot: bool = false
-	var skirt: bool = false
-	var apron: int = 0
-	var hair_style: int = HAIR_SHORT
-	var hat: int = HAT_NONE
-	var scarf: int = SCARF_NONE
-	var prop: int = PROP_NONE
-	var beard: int = 0
-	var hunch: int = 0
-	var collar: bool = true
-
 static var _cache: Dictionary = {}
 static var _names: PackedStringArray = PackedStringArray()
 
@@ -128,8 +100,8 @@ static func build_frames(who: String) -> SpriteFrames:
 	var key: String = who.strip_edges().to_lower()
 	if _cache.has(key):
 		return _cache[key] as SpriteFrames
-	var gen := CharacterSpriteGen.new()
-	var frames := SpriteFrames.new()
+	var gen: CharacterSpriteGen = CharacterSpriteGen.new()
+	var frames: SpriteFrames = SpriteFrames.new()
 	frames.remove_animation(&"default")
 	if _is_human(key) or not _is_object(key):
 		gen._build_human(frames, key)
@@ -169,8 +141,6 @@ static func _is_human(who: String) -> bool:
 	return false
 
 
-# ---------------------------------------------------------------- frame wiring
-
 func _add(frames: SpriteFrames, anim: String, img: Image) -> void:
 	if not frames.has_animation(anim):
 		frames.add_animation(anim)
@@ -191,16 +161,16 @@ func _build_human(frames: SpriteFrames, who: String) -> void:
 	var fig: Figure = _figure(who)
 	var dirs: Array[int] = [DIR_DOWN, DIR_UP, DIR_LEFT, DIR_RIGHT]
 	var names: Array[String] = ["down", "up", "left", "right"]
-	for i in dirs.size():
+	for i: int in dirs.size():
 		var dir: int = dirs[i]
 		_add(frames, "idle_%s" % names[i], _render_human(fig, dir, 0, 0, EMOTE_NONE))
 		_add(frames, "idle_%s" % names[i], _render_human(fig, dir, 1, 0, EMOTE_NONE))
 	if who == "milo":
-		for i in dirs.size():
+		for i: int in dirs.size():
 			var dir: int = dirs[i]
 			var strides: Array[int] = [-1, 0, 1, 0]
 			var bobs: Array[int] = [0, 1, 0, 1]
-			for f in 4:
+			for f: int in 4:
 				_add(frames, "walk_%s" % names[i], _render_human(fig, dir, bobs[f], strides[f], EMOTE_NONE))
 	_add(frames, "emote_happy", _render_human(fig, DIR_DOWN, 0, 0, EMOTE_HAPPY))
 	_add(frames, "emote_happy", _render_human(fig, DIR_DOWN, 1, 0, EMOTE_HAPPY))
@@ -234,10 +204,8 @@ func _build_bloom(frames: SpriteFrames, who: String) -> void:
 	_add(frames, "emote_happy", _render_bloom(kind, 1, true))
 
 
-# --------------------------------------------------------------------- figure
-
 func _figure(who: String) -> Figure:
-	var f := Figure.new()
+	var f: Figure = Figure.new()
 	match who:
 		"milo":
 			f.district = 0
@@ -500,7 +468,6 @@ func _figure(who: String) -> Figure:
 			f.hat = HAT_BEANIE
 			f.prop = PROP_ROPE
 		_:
-			# Generic neighbour: unremarkable coat, boots, short hair.
 			f.district = PixelCanvas.seeded_from(who) % 4
 			f.coat = PixelCanvas.MAT_CLOTH
 			f.accent = PixelCanvas.MAT_CLAY
@@ -510,8 +477,6 @@ func _figure(who: String) -> Figure:
 			f.boot = true
 	return f
 
-
-# ------------------------------------------------------------------ tag layer
 
 func _begin(district: int) -> void:
 	_pal = PixelCanvas.load_palette(district)
@@ -542,17 +507,17 @@ func _raw_px(x: int, y: int, c: Color) -> void:
 
 
 func _hline(x0: int, x1: int, y: int, mat: int, level: int) -> void:
-	for x in range(mini(x0, x1), maxi(x0, x1) + 1):
+	for x: int in range(mini(x0, x1), maxi(x0, x1) + 1):
 		_px(x, y, mat, level)
 
 
 func _vline(x: int, y0: int, y1: int, mat: int, level: int) -> void:
-	for y in range(mini(y0, y1), maxi(y0, y1) + 1):
+	for y: int in range(mini(y0, y1), maxi(y0, y1) + 1):
 		_px(x, y, mat, level)
 
 
 func _rect(x0: int, y0: int, x1: int, y1: int, mat: int, level: int) -> void:
-	for y in range(mini(y0, y1), maxi(y0, y1) + 1):
+	for y: int in range(mini(y0, y1), maxi(y0, y1) + 1):
 		_hline(x0, x1, y, mat, level)
 
 
@@ -561,8 +526,8 @@ func _ell(cx: int, cy: int, rx: int, ry: int, mat: int, level: int) -> void:
 		return
 	var rxf: float = float(maxi(1, rx))
 	var ryf: float = float(maxi(1, ry))
-	for y in range(cy - ry, cy + ry + 1):
-		for x in range(cx - rx, cx + rx + 1):
+	for y: int in range(cy - ry, cy + ry + 1):
+		for x: int in range(cx - rx, cx + rx + 1):
 			var dx: float = float(x - cx) / rxf
 			var dy: float = float(y - cy) / ryf
 			if dx * dx + dy * dy <= 1.02:
@@ -578,8 +543,8 @@ func _span_of(w: int) -> Vector2i:
 ## One lighting rule for the entire cast: top-right lit, bottom-left shaded.
 func _shade() -> void:
 	var src: PackedByteArray = _tags.duplicate()
-	for y in FRAME_H:
-		for x in FRAME_W:
+	for y: int in FRAME_H:
+		for x: int in FRAME_W:
 			var tag: int = src[y * FRAME_W + x]
 			if tag == 0 or tag >= TAG_RAW_BASE:
 				continue
@@ -601,10 +566,10 @@ func _empty_in(src: PackedByteArray, x: int, y: int) -> bool:
 
 
 func _materialize() -> Image:
-	var img := Image.create(FRAME_W, FRAME_H, false, Image.FORMAT_RGBA8)
+	var img: Image = Image.create(FRAME_W, FRAME_H, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0.0, 0.0, 0.0, 0.0))
-	for y in FRAME_H:
-		for x in FRAME_W:
+	for y: int in FRAME_H:
+		for x: int in FRAME_W:
 			var tag: int = _tags[y * FRAME_W + x]
 			if tag == 0:
 				continue
@@ -621,10 +586,10 @@ func _materialize() -> Image:
 ## Keeps a frame inside the 15-colour budget by folding overflow tones onto the
 ## nearest tone that already earned its place.
 func _limit_colors(img: Image) -> void:
-	var order := PackedColorArray()
+	var order: PackedColorArray = PackedColorArray()
 	var seen: Dictionary = {}
-	for y in FRAME_H:
-		for x in FRAME_W:
+	for y: int in FRAME_H:
+		for x: int in FRAME_W:
 			var c: Color = img.get_pixel(x, y)
 			if c.a < 0.5:
 				continue
@@ -634,11 +599,11 @@ func _limit_colors(img: Image) -> void:
 				order.append(c)
 	if order.size() <= MAX_COLORS:
 		return
-	var kept := PackedColorArray()
-	for i in MAX_COLORS:
+	var kept: PackedColorArray = PackedColorArray()
+	for i: int in MAX_COLORS:
 		kept.append(order[i])
-	for y in FRAME_H:
-		for x in FRAME_W:
+	for y: int in FRAME_H:
+		for x: int in FRAME_W:
 			var c: Color = img.get_pixel(x, y)
 			if c.a < 0.5:
 				continue
@@ -648,8 +613,6 @@ func _limit_colors(img: Image) -> void:
 			var mapped: Color = PixelCanvas.nearest_in(kept, c)
 			img.set_pixel(x, y, Color(mapped.r, mapped.g, mapped.b, 1.0))
 
-
-# ---------------------------------------------------------------- human figure
 
 func _render_human(fig: Figure, dir: int, bob: int, stride: int, emote: int) -> Image:
 	_begin(fig.district)
@@ -683,7 +646,7 @@ func _draw_legs(fig: Figure, side: bool, face_dir: int, stride: int) -> void:
 	var right_x: int = 8 + fig.leg_gap
 	var left_lift: bool = stride < 0
 	var right_lift: bool = stride > 0
-	for leg in 2:
+	for leg: int in 2:
 		var x0: int = left_x if leg == 0 else right_x
 		var mat_level: int = 2 if leg == 0 else 1
 		var lift: bool = left_lift if leg == 0 else right_lift
@@ -706,7 +669,7 @@ func _draw_body(fig: Figure, top: int, side: bool, face_dir: int, dir: int) -> v
 	var rows: int = maxi(1, hem - top)
 	var wide: int = fig.shoulder_w - (2 if side else 0)
 	var narrow: int = fig.hip_w - (2 if side else 0)
-	for y in range(top, hem + 1):
+	for y: int in range(top, hem + 1):
 		var t: float = float(y - top) / float(rows)
 		var w: int = roundi(lerpf(float(wide), float(narrow), t))
 		var span: Vector2i = _span_of(w)
@@ -768,7 +731,7 @@ func _draw_arms(fig: Figure, top: int, side: bool, face_dir: int, emote: int) ->
 
 func _draw_head(fig: Figure, head_y: int, side: bool, face_dir: int) -> void:
 	var span: Vector2i = _span_of(fig.head_w)
-	for i in fig.head_h:
+	for i: int in fig.head_h:
 		var inset: int = 0
 		if i == 0 or i == fig.head_h - 1:
 			inset = 1
@@ -797,7 +760,7 @@ func _draw_hair(fig: Figure, head_y: int, top: int, side: bool, face_dir: int, d
 	if style == HAIR_FULL:
 		rows = 4
 	var outer: Vector2i = Vector2i(span.x - 1, span.y + 1) if style == HAIR_FULL else span
-	for i in rows:
+	for i: int in rows:
 		if dir == DIR_UP:
 			_hline(outer.x, outer.y, head_y + i, fig.hair, 2)
 		elif i < rows - 1:
@@ -1001,8 +964,6 @@ func _draw_prop(fig: Figure, top: int, side: bool, face_dir: int, dir: int) -> v
 			_px(8, chest + 6, fig.accent, 1)
 
 
-# ------------------------------------------------------------------ creatures
-
 func _render_creature(who: String, kind: int, phase: int, emote: int) -> Image:
 	match kind:
 		0:
@@ -1128,8 +1089,6 @@ func _pigeon(phase: int, emote: int) -> void:
 		_px(12, head_y - 1, beak, 4)
 
 
-# -------------------------------------------------------------------- objects
-
 func _render_object(who: String, kind: int, phase: int, happy: bool) -> Image:
 	match kind:
 		0:
@@ -1179,7 +1138,7 @@ func _tea_set(phase: int, happy: bool) -> void:
 	_hline(1, 14, 19, wood, 3)
 	_px(0, 19, wood, 1)
 	_px(15, 19, wood, 1)
-	for cup in 2:
+	for cup: int in 2:
 		var x0: int = 3 + cup * 5
 		_rect(x0, 14, x0 + 3, 18, ceramic, 2)
 		_hline(x0, x0 + 3, 14, ceramic, 3)
@@ -1221,8 +1180,6 @@ func _shrine_lamp(phase: int, happy: bool) -> void:
 		_px(6, tip + 1, flame, 3)
 		_px(10, tip + 2, flame, 3)
 
-
-# --------------------------------------------------------------------- blooms
 
 func _render_bloom(kind: int, phase: int, happy: bool) -> Image:
 	match kind:
@@ -1317,3 +1274,32 @@ func _camelia(phase: int, happy: bool) -> void:
 		_ell(cx, 7, 1, 1, bloom, 4)
 		_px(cx + 3, 3, bloom, 4)
 		_px(cx - 4, 6, bloom, 3)
+
+
+## Body-plan knobs. One archetype = one Figure; silhouettes differ by
+## proportion (head size, shoulder width, hem height, leg weight) before colour.
+class Figure:
+	var skin: int = PixelCanvas.MAT_SKIN
+	var coat: int = PixelCanvas.MAT_CLOTH
+	var accent: int = PixelCanvas.MAT_CLAY
+	var hair: int = PixelCanvas.MAT_WOOD
+	var district: int = 0
+
+	var head_w: int = 6
+	var head_h: int = 7
+	var head_y: int = 2
+	var shoulder_w: int = 9
+	var hip_w: int = 7
+	var hem_y: int = 18
+	var leg_w: int = 2
+	var leg_gap: int = 1
+	var boot: bool = false
+	var skirt: bool = false
+	var apron: int = 0
+	var hair_style: int = HAIR_SHORT
+	var hat: int = HAT_NONE
+	var scarf: int = SCARF_NONE
+	var prop: int = PROP_NONE
+	var beard: int = 0
+	var hunch: int = 0
+	var collar: bool = true

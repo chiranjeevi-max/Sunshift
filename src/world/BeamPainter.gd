@@ -44,9 +44,9 @@ func _hide_from(first: int) -> void:
 
 func _quad(index: int) -> MeshInstance2D:
   while _pool.size() <= index:
-    var quad := MeshInstance2D.new()
+    var quad: MeshInstance2D = MeshInstance2D.new()
     quad.name = "Beam%d" % _pool.size()
-    var mat := ShaderMaterial.new()
+    var mat: ShaderMaterial = ShaderMaterial.new()
     mat.shader = _shader
     quad.material = mat
     add_child(quad)
@@ -75,11 +75,11 @@ func _place(quad: MeshInstance2D, segment: LightSolver.BeamSegment) -> void:
     Vector2(0.0, 0.0), Vector2(1.0, 0.0), Vector2(1.0, 1.0), Vector2(0.0, 1.0),
   ])
   arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 1, 2, 0, 2, 3])
-  var mesh := ArrayMesh.new()
+  var mesh: ArrayMesh = ArrayMesh.new()
   mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
   quad.mesh = mesh
   quad.visible = true
-  var mat := quad.material as ShaderMaterial
+  var mat: ShaderMaterial = quad.material as ShaderMaterial
   if mat != null:
     mat.set_shader_parameter("beam_color", ROSE if segment.wavelength == GridTypes.LightType.BEAM_ROSE else AMBER)
 

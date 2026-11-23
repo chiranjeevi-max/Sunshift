@@ -12,31 +12,6 @@ static var _by_id: Dictionary[String, Dictionary] = {}
 static var _loaded: bool = false
 
 
-static func _load() -> void:
-  if _loaded:
-    return
-  _loaded = true
-  var file: FileAccess = FileAccess.open(PATH, FileAccess.READ)
-  if file == null:
-    push_error("PostcardLibrary: cannot open %s" % PATH)
-    return
-  var parsed: Variant = JSON.parse_string(file.get_as_text())
-  file.close()
-  if not (parsed is Dictionary):
-    push_error("PostcardLibrary: %s is not a JSON object" % PATH)
-    return
-  var cards: Array = (parsed as Dictionary).get("postcards", []) as Array
-  for raw: Variant in cards:
-    if not (raw is Dictionary):
-      continue
-    var entry: Dictionary = raw as Dictionary
-    var id: String = str(entry.get("id", ""))
-    if id.is_empty():
-      continue
-    _entries.append(entry)
-    _by_id[id] = entry
-
-
 static func all() -> Array[Dictionary]:
   _load()
   return _entries.duplicate()
@@ -77,3 +52,28 @@ static func unlocked_prefix(completed: Dictionary[String, bool]) -> int:
       break
     run += 1
   return run
+
+
+static func _load() -> void:
+  if _loaded:
+    return
+  _loaded = true
+  var file: FileAccess = FileAccess.open(PATH, FileAccess.READ)
+  if file == null:
+    push_error("PostcardLibrary: cannot open %s" % PATH)
+    return
+  var parsed: Variant = JSON.parse_string(file.get_as_text())
+  file.close()
+  if not (parsed is Dictionary):
+    push_error("PostcardLibrary: %s is not a JSON object" % PATH)
+    return
+  var cards: Array = (parsed as Dictionary).get("postcards", []) as Array
+  for raw: Variant in cards:
+    if not (raw is Dictionary):
+      continue
+    var entry: Dictionary = raw as Dictionary
+    var id: String = str(entry.get("id", ""))
+    if id.is_empty():
+      continue
+    _entries.append(entry)
+    _by_id[id] = entry

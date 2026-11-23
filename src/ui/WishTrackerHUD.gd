@@ -45,6 +45,37 @@ func _process(delta: float) -> void:
   queue_redraw()
 
 
+func _draw() -> void:
+  if _total <= 0:
+    return
+  var sway: float = 1.0 if _sway else 0.0
+  var first: Vector2 = Vector2(6.0, 8.0)
+  var last: Vector2 = Vector2(6.0 + float(_total - 1) * PIP_SPACING, 8.0)
+  if _total > 1:
+    draw_line(first, last, Color(BRASS, 0.30), 1.0)
+  for i: int in _total:
+    var bob: float = sin(_phase * 1.6 + float(i) * 0.9) * 1.1 * sway
+    var centre: Vector2 = Vector2(6.0 + float(i) * PIP_SPACING, 8.0 + bob)
+    if i < _satisfied:
+      var breathe: float = 0.5 + 0.5 * sin(_phase * 2.1 + float(i) * 1.7) * sway
+      var strength: float = 0.35 + _warmth * 0.45 + breathe * 0.10
+      draw_circle(centre, PIP_RADIUS + 5.0, Color(HALO, 0.09 * strength))
+      draw_circle(centre, PIP_RADIUS + 2.0, Color(HALO, 0.16 * strength))
+      draw_circle(centre, PIP_RADIUS, GOLD)
+      draw_circle(centre - Vector2(0.0, 1.0), PIP_RADIUS * 0.55, Color(1.0, 0.95, 0.80))
+    else:
+      var inside: float = 0.80 if _contrast else 0.55
+      var rim: float = 0.98 if _contrast else 0.70
+      draw_circle(centre, PIP_RADIUS - 1.0, Color(COLD, inside))
+      draw_arc(centre, PIP_RADIUS, 0.0, TAU, 12, Color(BRASS, rim), 1.0, true)
+
+
+## Re-reads the comfort flags at once, so the owning HUD can push a change through.
+func refresh_flags() -> void:
+  _read_flags()
+  queue_redraw()
+
+
 ## Rebuilds the row from the live level and last solve, if either exists.
 func _seed_from_state() -> void:
   var level: LevelData = GameState.current_level
@@ -65,12 +96,6 @@ func _resize() -> void:
   queue_redraw()
 
 
-## Re-reads the comfort flags at once, so the owning HUD can push a change through.
-func refresh_flags() -> void:
-  _read_flags()
-  queue_redraw()
-
-
 func _read_flags() -> void:
   _sway = not SaveManager.get_accessibility_flag("reduced_sway", false)
   _contrast = SaveManager.get_accessibility_flag("high_contrast", false)
@@ -85,28 +110,3 @@ func _on_board_evaluated(warmth: float, satisfied: int, total: int) -> void:
 
 func _on_level_loaded(_level_id: String, _act: int) -> void:
   _seed_from_state()
-
-
-func _draw() -> void:
-  if _total <= 0:
-    return
-  var sway: float = 1.0 if _sway else 0.0
-  var first := Vector2(6.0, 8.0)
-  var last := Vector2(6.0 + float(_total - 1) * PIP_SPACING, 8.0)
-  if _total > 1:
-    draw_line(first, last, Color(BRASS, 0.30), 1.0)
-  for i: int in _total:
-    var bob: float = sin(_phase * 1.6 + float(i) * 0.9) * 1.1 * sway
-    var centre := Vector2(6.0 + float(i) * PIP_SPACING, 8.0 + bob)
-    if i < _satisfied:
-      var breathe: float = 0.5 + 0.5 * sin(_phase * 2.1 + float(i) * 1.7) * sway
-      var strength: float = 0.35 + _warmth * 0.45 + breathe * 0.10
-      draw_circle(centre, PIP_RADIUS + 5.0, Color(HALO, 0.09 * strength))
-      draw_circle(centre, PIP_RADIUS + 2.0, Color(HALO, 0.16 * strength))
-      draw_circle(centre, PIP_RADIUS, GOLD)
-      draw_circle(centre - Vector2(0.0, 1.0), PIP_RADIUS * 0.55, Color(1.0, 0.95, 0.80))
-    else:
-      var inside: float = 0.80 if _contrast else 0.55
-      var rim: float = 0.98 if _contrast else 0.70
-      draw_circle(centre, PIP_RADIUS - 1.0, Color(COLD, inside))
-      draw_arc(centre, PIP_RADIUS, 0.0, TAU, 12, Color(BRASS, rim), 1.0, true)

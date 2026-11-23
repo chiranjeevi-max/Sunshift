@@ -20,7 +20,7 @@ func _ready() -> void:
   _host.name = "SceneHost"
   add_child(_host)
 
-  var fade_layer := CanvasLayer.new()
+  var fade_layer: CanvasLayer = CanvasLayer.new()
   fade_layer.name = "FadeLayer"
   fade_layer.layer = 90
   add_child(fade_layer)

@@ -80,7 +80,7 @@ func _centre_level() -> void:
 
 
 func _build_layers() -> void:
-  var backdrop := Backdrop.new()
+  var backdrop: Backdrop = Backdrop.new()
   backdrop.name = "SkyBackdrop"
   backdrop.position = -position
   backdrop.z_index = -100
@@ -98,7 +98,7 @@ func _build_layers() -> void:
   _shadows.name = "ShadowOverlay"
   add_child(_shadows)
 
-  var y_sort := Node2D.new()
+  var y_sort: Node2D = Node2D.new()
   y_sort.name = "YSortWorld"
   y_sort.y_sort_enabled = true
   add_child(y_sort)
@@ -123,7 +123,7 @@ func _build_layers() -> void:
 
 
 func _new_tilemap(node_name: String) -> TileMapLayer:
-  var layer := TileMapLayer.new()
+  var layer: TileMapLayer = TileMapLayer.new()
   layer.name = node_name
   layer.tile_set = _tileset()
   layer.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -135,14 +135,14 @@ func _new_tilemap(node_name: String) -> TileMapLayer:
 ## never painted, so every hole and the whole outside of the courtyard used to be
 ## free floor and the player could walk off the level into the sky.
 func _build_bounds() -> void:
-  var body := StaticBody2D.new()
+  var body: StaticBody2D = StaticBody2D.new()
   body.name = "CourtyardBounds"
   body.collision_layer = 1
   body.collision_mask = 0
   add_child(body)
   for rect: Rect2 in _solid_rects():
-    var shape := CollisionShape2D.new()
-    var box := RectangleShape2D.new()
+    var shape: CollisionShape2D = CollisionShape2D.new()
+    var box: RectangleShape2D = RectangleShape2D.new()
     box.size = rect.size
     shape.shape = box
     shape.position = rect.position + rect.size * 0.5
@@ -235,7 +235,7 @@ func _make_prop(prop_type: int) -> InteractiveProp:
 
 func _spawn_neighbors() -> void:
   for spec: LevelData.WishSpec in level.wishes:
-    var npc := NeighborNPC.new()
+    var npc: NeighborNPC = NeighborNPC.new()
     npc.setup(spec)
     _neighbors_container.add_child(npc)
     _neighbors[spec.id] = npc
@@ -253,7 +253,7 @@ func _build_lights() -> void:
 
 
 func _build_grade() -> void:
-  var layer := CanvasLayer.new()
+  var layer: CanvasLayer = CanvasLayer.new()
   layer.name = "EmotionalGradeLayer"
   layer.layer = 2
   add_child(layer)
@@ -263,7 +263,7 @@ func _build_grade() -> void:
   _grade.mouse_filter = Control.MOUSE_FILTER_IGNORE
   var shader: Shader = load(GRADE_SHADER_PATH) as Shader
   if shader != null:
-    var mat := ShaderMaterial.new()
+    var mat: ShaderMaterial = ShaderMaterial.new()
     mat.shader = shader
     _grade.material = mat
   layer.add_child(_grade)
@@ -279,7 +279,7 @@ func _build_hud() -> void:
     return
   var hud_node: Variant = script.new()
   if hud_node is Node:
-    var node := hud_node as Node
+    var node: Node = hud_node as Node
     node.name = "SunDialHUD"
     _hud.add_child(node)
 
@@ -294,7 +294,7 @@ func _toggle_journal() -> void:
     return
   var created: Variant = script.new()
   if created is Node:
-    var node := created as Node
+    var node: Node = created as Node
     node.name = "ShiftJournalUI"
     _hud.add_child(node)
 
@@ -354,7 +354,7 @@ func _sync_lanterns(result: LightSolver.SolveResult) -> void:
 func _sync_grade(warmth: float) -> void:
   if _grade == null or _grade.material == null:
     return
-  var mat := _grade.material as ShaderMaterial
+  var mat: ShaderMaterial = _grade.material as ShaderMaterial
   mat.set_shader_parameter("warmth_factor", clampf(warmth, 0.0, 1.0))
 
 

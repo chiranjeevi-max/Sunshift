@@ -29,7 +29,7 @@ static func validate(level: LevelData) -> Array[String]:
   if not level.in_bounds(level.player_spawn.x, level.player_spawn.y):
     errors.append("player_spawn (%d,%d) is out of bounds" % [level.player_spawn.x, level.player_spawn.y])
 
-  var initial := SimState.initial(level)
+  var initial: SimState = SimState.initial(level)
   if level.in_bounds(level.player_spawn.x, level.player_spawn.y) and not level.is_walkable(level.player_spawn.x, level.player_spawn.y, initial):
     errors.append("player_spawn (%d,%d) is not walkable" % [level.player_spawn.x, level.player_spawn.y])
 
@@ -47,7 +47,7 @@ static func validate(level: LevelData) -> Array[String]:
     var tile: LevelData.TileSpec = level.tile_at(prop.x, prop.y)
     if tile.type == GridTypes.TileType.VOID or tile.type == GridTypes.TileType.WALL:
       errors.append("prop \"%s\" sits on a %s tile" % [prop.id, GridTypes.tile_name(tile.type)])
-    var cell := Vector2i(prop.x, prop.y)
+    var cell: Vector2i = Vector2i(prop.x, prop.y)
     if prop_cells.has(cell):
       errors.append("props \"%s\" and \"%s\" overlap at (%d,%d)" % [prop_cells[cell], prop.id, prop.x, prop.y])
     else:
@@ -74,7 +74,7 @@ static func validate(level: LevelData) -> Array[String]:
     var tile: LevelData.TileSpec = level.tile_at(wish.x, wish.y)
     if tile.type == GridTypes.TileType.VOID:
       errors.append("wish \"%s\" stands on a void tile" % wish.id)
-    var cell := Vector2i(wish.x, wish.y)
+    var cell: Vector2i = Vector2i(wish.x, wish.y)
     if wish_cells.has(cell):
       errors.append("wishes \"%s\" and \"%s\" share cell (%d,%d)" % [wish_cells[cell], wish.id, wish.x, wish.y])
     else:
@@ -123,7 +123,7 @@ static func all_props_reachable(level: LevelData, state: SimState) -> Array[Stri
     return missing
   var reach: Dictionary = reachable_cells(level, state, level.player_spawn)
   for prop: LevelData.PropSpec in level.props:
-    var cell := Vector2i(prop.x, prop.y)
+    var cell: Vector2i = Vector2i(prop.x, prop.y)
     var ok: bool = reach.has(cell)
     if not ok:
       for dir: Vector2i in _DIRS:
@@ -139,7 +139,7 @@ static func all_props_reachable(level: LevelData, state: SimState) -> Array[Stri
 static func bfs_min_moves(level: LevelData, state_cap: int = DEFAULT_STATE_CAP) -> int:
   if level == null:
     return -1
-  var start := SimState.initial(level)
+  var start: SimState = SimState.initial(level)
   var visited: Dictionary[String, bool] = {}
   visited[start.key()] = true
   var frontier: Array[SimState] = [start]
@@ -158,7 +158,7 @@ static func bfs_min_moves(level: LevelData, state_cap: int = DEFAULT_STATE_CAP) 
       return depth
     var charge: Dictionary[String, int] = result.next_lantern_charge
     for step: int in _SUN_STEPS:
-      var sun_child := current.copy()
+      var sun_child: SimState = current.copy()
       sun_child.sun_angle = posmod(current.sun_angle + step, 8)
       sun_child.lantern_charge = SimState.copy_int_dict(charge)
       _enqueue(sun_child, depth, visited, frontier, depths)
@@ -170,7 +170,7 @@ static func bfs_min_moves(level: LevelData, state_cap: int = DEFAULT_STATE_CAP) 
       var to_state: int = posmod(from_state + 1, state_count)
       if to_state == from_state:
         continue
-      var prop_child := current.copy()
+      var prop_child: SimState = current.copy()
       prop_child.prop_states[prop.id] = to_state
       prop_child.lantern_charge = SimState.copy_int_dict(charge)
       _enqueue(prop_child, depth, visited, frontier, depths)
@@ -185,7 +185,7 @@ static func bfs_solution(level: LevelData, state_cap: int = DEFAULT_STATE_CAP) -
   var moves: Array[Dictionary] = []
   if level == null:
     return moves
-  var start := SimState.initial(level)
+  var start: SimState = SimState.initial(level)
   var visited: Dictionary[String, bool] = {start.key(): true}
   var parents: Dictionary[String, String] = {}
   var parent_moves: Dictionary[String, Dictionary] = {}
@@ -203,7 +203,7 @@ static func bfs_solution(level: LevelData, state_cap: int = DEFAULT_STATE_CAP) -
       return _walk_back(current.key(), parents, parent_moves)
     var charge: Dictionary[String, int] = result.next_lantern_charge
     for step: int in _SUN_STEPS:
-      var sun_child := current.copy()
+      var sun_child: SimState = current.copy()
       sun_child.sun_angle = posmod(current.sun_angle + step, 8)
       sun_child.lantern_charge = SimState.copy_int_dict(charge)
       _visit(sun_child, current.key(), {"kind": "sun", "step": step, "id": ""},
@@ -216,12 +216,16 @@ static func bfs_solution(level: LevelData, state_cap: int = DEFAULT_STATE_CAP) -
       var to_state: int = posmod(from_state + 1, state_count)
       if to_state == from_state:
         continue
-      var prop_child := current.copy()
+      var prop_child: SimState = current.copy()
       prop_child.prop_states[prop.id] = to_state
       prop_child.lantern_charge = SimState.copy_int_dict(charge)
       _visit(prop_child, current.key(), {"kind": "prop", "step": 0, "id": prop.id},
           visited, parents, parent_moves, frontier, depths, depth)
   return moves
+
+
+static func solve_state(level: LevelData, state: SimState) -> LightSolver.SolveResult:
+  return LightSolver.solve(level, state)
 
 
 static func _visit(child: SimState, parent_key: String, move: Dictionary,
@@ -247,10 +251,6 @@ static func _walk_back(key: String, parents: Dictionary[String, String],
     cursor = parents[cursor]
   reversed.reverse()
   return reversed
-
-
-static func solve_state(level: LevelData, state: SimState) -> LightSolver.SolveResult:
-  return LightSolver.solve(level, state)
 
 
 static func _enqueue(child: SimState, depth: int, visited: Dictionary[String, bool], frontier: Array[SimState], depths: Array[int]) -> void:

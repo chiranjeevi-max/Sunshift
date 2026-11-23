@@ -11,13 +11,6 @@ var _result: LightSolver.SolveResult
 var _sun: Vector2i = Vector2i(1, 0)
 
 
-func paint(level: LevelData, solve: LightSolver.SolveResult, sun_angle: int) -> void:
-  _level = level
-  _result = solve
-  _sun = GridTypes.sun_dir(sun_angle)
-  queue_redraw()
-
-
 func _draw() -> void:
   if _level == null or _result == null:
     return
@@ -34,3 +27,10 @@ func _draw() -> void:
       if tile.elevation >= 1:
         var smear: Vector2 = Vector2(-sun.x, -sun.y) * CELL
         draw_rect(Rect2(origin + smear, Vector2(CELL, CELL)), Color(0.06, 0.07, 0.14, 0.16))
+
+
+func paint(level: LevelData, solve: LightSolver.SolveResult, sun_angle: int) -> void:
+  _level = level
+  _result = solve
+  _sun = GridTypes.sun_dir(sun_angle)
+  queue_redraw()

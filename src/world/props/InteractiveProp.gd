@@ -75,12 +75,12 @@ func _build_visual() -> void:
 func _build_collision() -> void:
   if prop_type == GridTypes.PropType.AWNING:
     return
-  var body := StaticBody2D.new()
+  var body: StaticBody2D = StaticBody2D.new()
   body.name = "Solid"
   body.collision_layer = 1
   body.collision_mask = 0
-  var shape := CollisionShape2D.new()
-  var box := RectangleShape2D.new()
+  var shape: CollisionShape2D = CollisionShape2D.new()
+  var box: RectangleShape2D = RectangleShape2D.new()
   box.size = Vector2(CELL, CELL)
   shape.shape = box
   body.add_child(shape)
@@ -98,7 +98,7 @@ func _apply_sway() -> void:
   var shader: Shader = load(SWAY_SHADER_PATH) as Shader
   if shader == null:
     return
-  var mat := ShaderMaterial.new()
+  var mat: ShaderMaterial = ShaderMaterial.new()
   mat.shader = shader
   mat.set_shader_parameter("anchor_top", true)
   mat.set_shader_parameter("anchor_y", 0.18)
@@ -127,7 +127,7 @@ func _frames() -> SpriteFrames:
 
 
 func _fallback_frames() -> SpriteFrames:
-  var frames := SpriteFrames.new()
+  var frames: SpriteFrames = SpriteFrames.new()
   var img: Image = Image.create(CELL, CELL * 2, false, Image.FORMAT_RGBA8)
   img.fill(Color(0.72, 0.55, 0.25, 1.0))
   var tex: ImageTexture = ImageTexture.create_from_image(img)

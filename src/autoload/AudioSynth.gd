@@ -1,6 +1,6 @@
 extends Node
 
-## Autoload. Bakes the adaptive score and foley once at boot, then only mixes.
+## Bakes sound effects at boot and caches the score for each district on demand.
 ##
 ## Synthesis is deliberately sample-based: AudioStreamGenerator filled per frame
 ## stutters on WebAssembly, so every stem is a pre-rendered looping
@@ -35,13 +35,21 @@ func _ready() -> void:
   _music_player.bus = "Music"
   add_child(_music_player)
   for i: int in CUE_PLAYERS:
-    var player := AudioStreamPlayer.new()
+    var player: AudioStreamPlayer = AudioStreamPlayer.new()
     player.name = "Cue%d" % i
     player.bus = "SFX"
     add_child(player)
     _cue_players.append(player)
   _bake()
   _connect_bus()
+
+
+func _process(delta: float) -> void:
+  if is_equal_approx(_warmth, _target_warmth):
+    return
+  var step: float = delta / CROSSFADE_TIME
+  _warmth = move_toward(_warmth, _target_warmth, step)
+  _apply_stem_volumes()
 
 
 func is_ready() -> bool:
@@ -95,14 +103,6 @@ func current_warmth() -> float:
   return _warmth
 
 
-func _process(delta: float) -> void:
-  if is_equal_approx(_warmth, _target_warmth):
-    return
-  var step: float = delta / CROSSFADE_TIME
-  _warmth = move_toward(_warmth, _target_warmth, step)
-  _apply_stem_volumes()
-
-
 func _apply_stem_volumes() -> void:
   var stream: AudioStreamSynchronized = _music_player.stream
   if stream == null:
@@ -122,7 +122,6 @@ func _fade_in(warmth: float, threshold: float) -> float:
 
 
 func _bake() -> void:
-  var started: int = Time.get_ticks_msec()
   var foley_synth: GDScript = load(FOLEY_SYNTH_PATH) as GDScript
   if foley_synth != null:
     var built: Variant = foley_synth.call("build_all")
@@ -132,8 +131,6 @@ func _bake() -> void:
         if pool is AudioStreamRandomizer:
           _foley[cue] = pool as AudioStreamRandomizer
   _baked = true
-  print("AudioSynth: baked %d cues in %d ms (music is baked per district on demand)" % [
-    _foley.size(), Time.get_ticks_msec() - started])
 
 
 func _music_for(district: int) -> AudioStreamSynchronized:
@@ -153,7 +150,7 @@ func _music_for(district: int) -> AudioStreamSynchronized:
 
 
 func _wrap_synchronized(stems: Array) -> AudioStreamSynchronized:
-  var synced := AudioStreamSynchronized.new()
+  var synced: AudioStreamSynchronized = AudioStreamSynchronized.new()
   synced.set_stream_count(STEM_COUNT)
   for i: int in mini(stems.size(), STEM_COUNT):
     var stream: Variant = stems[i]

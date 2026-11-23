@@ -5,16 +5,10 @@ extends RefCounted
 ## Each command also snapshots lantern charge, because charge is part of the state
 ## that solve() reads back on the next turn.
 
-enum Kind { SUN, PROP }
-
-
-class Command extends RefCounted:
-  var kind: int = Kind.SUN
-  var key: String = ""
-  var from_value: int = 0
-  var to_value: int = 0
-  var charge_before: Dictionary[String, int] = {}
-
+enum Kind {
+  SUN,
+  PROP,
+}
 
 var _commands: Array[Command] = []
 
@@ -24,7 +18,7 @@ func reset() -> void:
 
 
 func record_sun(from_angle: int, to_angle: int, charge_before: Dictionary[String, int]) -> void:
-  var cmd := Command.new()
+  var cmd: Command = Command.new()
   cmd.kind = Kind.SUN
   cmd.from_value = from_angle
   cmd.to_value = to_angle
@@ -33,7 +27,7 @@ func record_sun(from_angle: int, to_angle: int, charge_before: Dictionary[String
 
 
 func record_prop(prop_id: String, from_state: int, to_state: int, charge_before: Dictionary[String, int]) -> void:
-  var cmd := Command.new()
+  var cmd: Command = Command.new()
   cmd.kind = Kind.PROP
   cmd.key = prop_id
   cmd.from_value = from_state
@@ -61,3 +55,11 @@ func undo(state: SimState) -> bool:
     state.prop_states[cmd.key] = cmd.from_value
   state.lantern_charge = SimState.copy_int_dict(cmd.charge_before)
   return true
+
+
+class Command extends RefCounted:
+  var kind: int = Kind.SUN
+  var key: String = ""
+  var from_value: int = 0
+  var to_value: int = 0
+  var charge_before: Dictionary[String, int] = {}

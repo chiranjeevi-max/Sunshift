@@ -60,13 +60,13 @@ func _load_palettes() -> void:
   for entry: Variant in (districts_value as Array):
     if not (entry is Dictionary):
       continue
-    var colors := _parse_colors((entry as Dictionary).get("colors", null))
+    var colors: PackedColorArray = _parse_colors((entry as Dictionary).get("colors", null))
     if colors.size() > 0:
       _palettes.append(colors)
 
 
 func _parse_colors(value: Variant) -> PackedColorArray:
-  var out := PackedColorArray()
+  var out: PackedColorArray = PackedColorArray()
   if not (value is Array):
     return out
   for item: Variant in (value as Array):

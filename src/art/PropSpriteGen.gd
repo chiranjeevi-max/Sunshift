@@ -63,23 +63,23 @@ static func build_frames(prop_type: int, states: int) -> SpriteFrames:
 		return cached as SpriteFrames
 
 	var images: Array[Image] = []
-	for s in count:
+	for s: int in count:
 		images.append(render_image(p, clampi(s, 0, state_count(p) - 1)))
 	var glow_frames: int = 2 if p == LANTERN else 0
-	for g in glow_frames:
+	for g: int in glow_frames:
 		images.append(render_glow(g))
 
 	var columns: int = images.size()
 	var atlas: Image = Image.create_empty(CANVAS_W * columns, CANVAS_H, false, Image.FORMAT_RGBA8)
 	atlas.fill(Color(0.0, 0.0, 0.0, 0.0))
-	for i in columns:
+	for i: int in columns:
 		_stamp(atlas, images[i], i * CANVAS_W, 0)
 	var atlas_texture: ImageTexture = ImageTexture.create_from_image(atlas)
 	_atlas_cache[key] = atlas_texture
 
-	var frames := SpriteFrames.new()
+	var frames: SpriteFrames = SpriteFrames.new()
 	frames.remove_animation("default")
-	for s in count:
+	for s: int in count:
 		var anim: String = STATE_ANIM + str(s)
 		frames.add_animation(anim)
 		frames.set_animation_loop(anim, false)
@@ -89,7 +89,7 @@ static func build_frames(prop_type: int, states: int) -> SpriteFrames:
 		frames.add_animation(GLOW_ANIM)
 		frames.set_animation_loop(GLOW_ANIM, true)
 		frames.set_animation_speed(GLOW_ANIM, 3.0)
-		for g in glow_frames:
+		for g: int in glow_frames:
 			frames.add_frame(GLOW_ANIM, _region(atlas_texture, count + g))
 
 	_frames_cache[key] = frames
@@ -102,7 +102,7 @@ static func render_image(prop_type: int, state: int) -> Image:
 	var s: int = clampi(state, 0, state_count(p) - 1)
 	var img: Image = Image.create_empty(CANVAS_W, CANVAS_H, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0.0, 0.0, 0.0, 0.0))
-	var pc := PixelCanvas.new()
+	var pc: PixelCanvas = PixelCanvas.new()
 	var pal: PixelCanvas.Palette = _palette()
 	match p:
 		MIRROR:
@@ -126,7 +126,7 @@ static func render_image(prop_type: int, state: int) -> Image:
 static func render_glow(level: int) -> Image:
 	var img: Image = Image.create_empty(CANVAS_W, CANVAS_H, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0.0, 0.0, 0.0, 0.0))
-	var pc := PixelCanvas.new()
+	var pc: PixelCanvas = PixelCanvas.new()
 	_render_lantern(pc, img, _palette(), clampi(level, 0, 1))
 	return img
 
@@ -136,7 +136,7 @@ static func _palette() -> PixelCanvas.Palette:
 	if cached != null:
 		return cached as PixelCanvas.Palette
 	var source: PixelCanvas.Palette = PixelCanvas.load_palette(0)
-	var warm := PixelCanvas.Palette.new()
+	var warm: PixelCanvas.Palette = PixelCanvas.Palette.new()
 	warm.district = source.district
 	warm.display_name = source.display_name
 	warm.act = source.act
@@ -148,15 +148,15 @@ static func _palette() -> PixelCanvas.Palette:
 
 
 static func _region(atlas_texture: ImageTexture, column: int) -> AtlasTexture:
-	var slice := AtlasTexture.new()
+	var slice: AtlasTexture = AtlasTexture.new()
 	slice.atlas = atlas_texture
 	slice.region = Rect2(float(column * CANVAS_W), 0.0, float(CANVAS_W), float(CANVAS_H))
 	return slice
 
 
 static func _stamp(dst: Image, src: Image, ox: int, oy: int) -> void:
-	for y in src.get_height():
-		for x in src.get_width():
+	for y: int in src.get_height():
+		for x: int in src.get_width():
 			var c: Color = src.get_pixel(x, y)
 			if c.a <= 0.5:
 				continue
@@ -173,10 +173,10 @@ static func _clear(img: Image, x: int, y: int) -> void:
 static func _alpha_mask(img: Image) -> PackedByteArray:
 	var w: int = img.get_width()
 	var h: int = img.get_height()
-	var mask := PackedByteArray()
+	var mask: PackedByteArray = PackedByteArray()
 	mask.resize(w * h)
-	for y in h:
-		for x in w:
+	for y: int in h:
+		for x: int in w:
 			if img.get_pixel(x, y).a > 0.5:
 				mask[y * w + x] = 1
 	return mask
@@ -186,9 +186,9 @@ static func _alpha_mask(img: Image) -> PackedByteArray:
 static func _rim(img: Image, mask: PackedByteArray, light: Color, dark: Color) -> void:
 	var w: int = img.get_width()
 	var h: int = img.get_height()
-	var pc := PixelCanvas.new()
-	for y in h:
-		for x in w:
+	var pc: PixelCanvas = PixelCanvas.new()
+	for y: int in h:
+		for x: int in w:
 			if mask[y * w + x] == 0:
 				continue
 			var open_up: bool = y == 0 or mask[(y - 1) * w + x] == 0
@@ -205,26 +205,23 @@ static func _rim(img: Image, mask: PackedByteArray, light: Color, dark: Color) -
 static func _span(pc: PixelCanvas, img: Image, y: int, x0: int, x1: int, colours: PackedColorArray) -> void:
 	if x1 < x0 or colours.is_empty():
 		return
-	for x in range(x0, x1 + 1):
+	for x: int in range(x0, x1 + 1):
 		var band: int = (x - x0) / 2
 		pc.put(img, x, y, colours[band % colours.size()])
 
-
-# --- MIRROR ------------------------------------------------------------------
 
 static func _render_mirror(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette, state: int) -> void:
 	var wood_d: Color = pal.mat(PixelCanvas.MAT_WOOD, 0)
 	var wood_m: Color = pal.mat(PixelCanvas.MAT_WOOD, 0)
 	var wood_l: Color = pal.mat(PixelCanvas.MAT_WOOD, 4)
 	var ink: Color = pal.darkest()
-	var metal := PackedColorArray([
+	var metal: PackedColorArray = PackedColorArray([
 		pal.mat(PixelCanvas.MAT_METAL, 1),
 		pal.mat(PixelCanvas.MAT_METAL, 3),
 		pal.mat(PixelCanvas.MAT_METAL, 4),
 	])
 	var specular: Color = pal.color(PixelCanvas.CLOTH_LIGHT)
 
-	# Plinth and post: the walnut stand the plate hangs from.
 	pc.fill_rect(img, Rect2i(4, 28, 9, 4), wood_m)
 	pc.hline(img, 4, 12, 28, wood_l)
 	pc.hline(img, 4, 12, 31, wood_d)
@@ -234,8 +231,8 @@ static func _render_mirror(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 	# Angled plate: state 0 leans "/" (E->N), state 1 leans "\" (E->S).
 	var glass: Array[Vector2i] = []
 	var frame: Array[Vector2i] = []
-	for y in range(3, 28):
-		for x in CANVAS_W:
+	for y: int in range(3, 28):
+		for x: int in CANVAS_W:
 			var dx: float = float(x - 8)
 			var dy: float = float(y - 15)
 			var d: float = (dx + dy) * 0.7071 if state == 0 else (dx - dy) * 0.7071
@@ -251,7 +248,7 @@ static func _render_mirror(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 
 	var lowest: float = 0.0
 	var highest: float = 0.0
-	var first := true
+	var first: bool = true
 	for cell: Vector2i in glass:
 		var lit: float = float(cell.x) - float(cell.y)
 		if first:
@@ -270,7 +267,6 @@ static func _render_mirror(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 	var mask: PackedByteArray = _alpha_mask(img)
 	_rim(img, mask, wood_l, wood_d)
 
-	# Bright specular streak running along the plate's sunward half.
 	for cell: Vector2i in glass:
 		var lit: float = float(cell.x) - float(cell.y)
 		var dx: float = float(cell.x - 8)
@@ -279,8 +275,6 @@ static func _render_mirror(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 		if lit > highest - 2.0 and absf(t) < 5.0:
 			pc.put(img, cell.x, cell.y, specular)
 
-
-# --- AWNING ------------------------------------------------------------------
 
 static func _render_awning(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette, state: int) -> void:
 	var iron: Color = pal.mat(PixelCanvas.MAT_METAL, 2)
@@ -293,7 +287,6 @@ static func _render_awning(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 	var cream_l: Color = pal.color(PixelCanvas.CLOTH_LIGHT)
 	var ink: Color = pal.darkest()
 
-	# Two freestanding posts and their feet hold the rail above the tile.
 	for x: int in [2, 13]:
 		pc.vline(img, x, 11, 28, iron_d)
 		pc.vline(img, x + 1, 11, 28, iron)
@@ -306,7 +299,6 @@ static func _render_awning(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 	pc.hline(img, 5, 10, 30, iron_d)
 	pc.hline(img, 4, 11, 31, ink)
 
-	# Rail with finials.
 	pc.fill_rect(img, Rect2i(1, 9, 14, 2), iron)
 	pc.hline(img, 1, 14, 9, iron_l)
 	pc.hline(img, 1, 14, 10, iron_d)
@@ -315,8 +307,8 @@ static func _render_awning(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 	pc.put(img, 15, 9, iron)
 
 	var bottom: int = 16 if state == 0 else 24
-	var stripes := PackedColorArray([cerulean, cream])
-	for y in range(11, bottom + 1):
+	var stripes: PackedColorArray = PackedColorArray([cerulean, cream])
+	for y: int in range(11, bottom + 1):
 		_span(pc, img, y, 1, 14, stripes)
 
 	if state == 0:
@@ -326,7 +318,7 @@ static func _render_awning(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 		pc.hline(img, 1, 14, 12, cream_l)
 	else:
 		# Extended: a deep valance with scallops and hanging tassels.
-		for x in range(1, 15):
+		for x: int in range(1, 15):
 			if posmod(x - 1, 4) == 3:
 				_clear(img, x, bottom)
 			else:
@@ -339,14 +331,12 @@ static func _render_awning(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette
 	var mask: PackedByteArray = _alpha_mask(img)
 	_rim(img, mask, cream_l, ink)
 	# Re-assert the stripe rhythm after the rim pass so the awning still reads.
-	for y in range(12, bottom):
-		for x in range(2, 14):
+	for y: int in range(12, bottom):
+		for x: int in range(2, 14):
 			var band: int = ((x - 1) / 2) % 2
 			pc.put(img, x, y, cerulean_l if band == 0 and y < 14 else (cerulean if band == 0 else cream))
 	pc.vline(img, 13, 12, bottom - 1, cerulean_l)
 
-
-# --- SHUTTER -----------------------------------------------------------------
 
 static func _render_shutter(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette, state: int) -> void:
 	var teak_d: Color = pal.mat(PixelCanvas.MAT_WOOD, 0)
@@ -368,7 +358,7 @@ static func _render_shutter(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palett
 	if state == 0:
 		# Closed: full slatted teak panel across the opening.
 		pc.fill_rect(img, Rect2i(3, 5, 10, 21), teak_m)
-		for y in range(7, 25, 2):
+		for y: int in range(7, 25, 2):
 			pc.hline(img, 4, 11, y, teak_d)
 			pc.hline(img, 4, 11, y + 1, teak_l)
 		pc.rect_outline(img, Rect2i(3, 5, 10, 21), teak_d)
@@ -379,12 +369,12 @@ static func _render_shutter(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palett
 	else:
 		# Open: both leaves swing clear, showing the dark room behind.
 		pc.fill_rect(img, Rect2i(5, 5, 6, 21), ink)
-		for y in range(6, 25, 3):
+		for y: int in range(6, 25, 3):
 			pc.hline(img, 5, 10, y, pal.mat(PixelCanvas.MAT_STONE, 0))
 		for x: int in [1, 11]:
 			pc.fill_rect(img, Rect2i(x, 5, 4, 21), teak_d)
 			pc.vline(img, x + 3, 5, 25, teak_m)
-			for y in range(7, 25, 2):
+			for y: int in range(7, 25, 2):
 				pc.hline(img, x, x + 2, y, teak_l)
 		pc.fill_rect(img, Rect2i(3, 10, 2, 2), iron)
 		pc.fill_rect(img, Rect2i(9, 10, 2, 2), iron)
@@ -394,14 +384,12 @@ static func _render_shutter(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palett
 	_rim(img, mask, teak_l, ink)
 
 
-# --- PRISM -------------------------------------------------------------------
-
 static func _render_prism(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette) -> void:
 	var brass_d: Color = pal.mat(PixelCanvas.MAT_METAL, 0)
 	var brass: Color = pal.mat(PixelCanvas.MAT_METAL, 2)
 	var brass_l: Color = pal.mat(PixelCanvas.MAT_METAL, 4)
 	var ink: Color = pal.darkest()
-	var glass := PackedColorArray([
+	var glass: PackedColorArray = PackedColorArray([
 		pal.mat(PixelCanvas.MAT_WATER, 1),
 		pal.mat(PixelCanvas.MAT_WATER, 2),
 		pal.mat(PixelCanvas.MAT_WATER, 3),
@@ -409,12 +397,11 @@ static func _render_prism(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette)
 	])
 	var sparkle: Color = pal.color(PixelCanvas.CLOTH_LIGHT)
 
-	# Chain from the ceiling and down to the tile foot.
-	for y in range(2, 7):
+	for y: int in range(2, 7):
 		pc.put(img, 8, y, brass if posmod(y, 2) == 0 else brass_l)
 	pc.put(img, 7, 2, brass_d)
 	pc.put(img, 9, 2, brass_d)
-	for y in range(25, 31):
+	for y: int in range(25, 31):
 		pc.put(img, 8, y, brass if posmod(y, 2) == 0 else brass_l)
 	pc.put(img, 8, 31, brass_d)
 
@@ -422,13 +409,13 @@ static func _render_prism(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette)
 	var top: int = 6
 	var mid: int = 15
 	var bottom: int = 25
-	for y in range(top, bottom + 1):
+	for y: int in range(top, bottom + 1):
 		var half: int = 0
 		if y <= mid:
 			half = roundi(6.0 * float(y - top) / float(mid - top))
 		else:
 			half = roundi(6.0 * float(bottom - y) / float(bottom - mid))
-		for x in range(8 - half, 8 + half + 1):
+		for x: int in range(8 - half, 8 + half + 1):
 			var tone: int = 0
 			if x >= 8 and y <= mid:
 				tone = 3
@@ -440,8 +427,7 @@ static func _render_prism(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette)
 				tone = 0
 			pc.put(img, x, y, glass[tone])
 
-	# Facet edges and glints.
-	for i in 4:
+	for i: int in 4:
 		pc.put(img, 8 - i, mid - i, pal.mat(PixelCanvas.MAT_WATER, 0))
 		pc.put(img, 8 + i, mid - i, pal.mat(PixelCanvas.MAT_WATER, 0))
 		pc.put(img, 8 - i, mid + i, pal.mat(PixelCanvas.MAT_WATER, 0))
@@ -453,8 +439,6 @@ static func _render_prism(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette)
 	var mask: PackedByteArray = _alpha_mask(img)
 	_rim(img, mask, sparkle, ink)
 
-
-# --- STAINED GLASS -----------------------------------------------------------
 
 static func _render_stained_glass(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette) -> void:
 	var lead: Color = pal.mat(PixelCanvas.MAT_METAL, 0)
@@ -468,30 +452,26 @@ static func _render_stained_glass(pc: PixelCanvas, img: Image, pal: PixelCanvas.
 	var stone_l: Color = pal.mat(PixelCanvas.MAT_STONE, 4)
 	var ink: Color = pal.darkest()
 
-	# Stone sill the panel is leaded into.
 	pc.fill_rect(img, Rect2i(2, 27, 12, 3), stone)
 	pc.hline(img, 2, 13, 27, stone_l)
 	pc.hline(img, 2, 13, 30, pal.mat(PixelCanvas.MAT_STONE, 0))
 	pc.fill_rect(img, Rect2i(5, 30, 7, 2), pal.mat(PixelCanvas.MAT_STONE, 0))
 
-	# Leaded glass field behind the tracery.
 	pc.fill_rect(img, Rect2i(2, 5, 12, 22), rose)
-	for y in range(6, 26, 3):
-		for x in range(3, 13, 3):
+	for y: int in range(6, 26, 3):
+		for x: int in range(3, 13, 3):
 			pc.put(img, x, y, rose_l if posmod(x + y, 2) == 0 else gold_d)
 
-	# Rose window with a gold heart.
 	pc.disc(img, 8, 12, 4, lead)
 	pc.disc(img, 8, 12, 3, gold)
 	pc.disc(img, 8, 12, 1, rose_l)
 	pc.put(img, 9, 10, pal.color(PixelCanvas.CLOTH_LIGHT))
 
-	# Two lancets below, split by a lead mullion.
 	pc.hline(img, 2, 13, 18, lead)
 	pc.vline(img, 8, 18, 26, lead)
 	pc.fill_rect(img, Rect2i(3, 19, 5, 8), rose_d)
 	pc.fill_rect(img, Rect2i(9, 19, 4, 8), rose)
-	for y in range(20, 26, 2):
+	for y: int in range(20, 26, 2):
 		pc.put(img, 4, y, gold)
 		pc.put(img, 11, y, gold_d)
 
@@ -501,8 +481,6 @@ static func _render_stained_glass(pc: PixelCanvas, img: Image, pal: PixelCanvas.
 	_rim(img, mask, pal.color(PixelCanvas.CLOTH_LIGHT), ink)
 	pc.vline(img, 13, 6, 26, lead_l)
 
-
-# --- LANTERN -----------------------------------------------------------------
 
 static func _render_lantern(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palette, glow: int) -> void:
 	var iron_d: Color = pal.darkest()
@@ -517,7 +495,6 @@ static func _render_lantern(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palett
 	var body: Image = Image.create_empty(CANVAS_W, CANVAS_H, false, Image.FORMAT_RGBA8)
 	body.fill(Color(0.0, 0.0, 0.0, 0.0))
 
-	# Ceiling hook, finial and vented cap.
 	pc.put(body, 8, 1, iron_d)
 	pc.vline(body, 8, 2, 5, iron)
 	pc.fill_rect(body, Rect2i(6, 6, 5, 2), iron)
@@ -526,15 +503,14 @@ static func _render_lantern(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palett
 	pc.hline(body, 6, 10, 9, iron_l)
 	pc.hline(body, 4, 12, 10, iron_d)
 
-	# Iron cage around the glass globe.
 	pc.ellipse_outline(body, 8, 18, 5, 7, iron)
 	pc.vline(body, 3, 14, 22, iron_d)
 	pc.vline(body, 12, 14, 22, iron_l)
 	pc.hline(body, 3, 12, 18, iron_d)
 
 	# Glass: warm core offset toward the top-right light.
-	for y in range(12, 25):
-		for x in range(3, 14):
+	for y: int in range(12, 25):
+		for x: int in range(3, 14):
 			var dx: float = float(x - 8) / 5.0
 			var dy: float = float(y - 18) / 7.0
 			if dx * dx + dy * dy > 0.98:
@@ -551,12 +527,10 @@ static func _render_lantern(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palett
 				tone = pal.mat(PixelCanvas.MAT_CLAY, 2)
 			pc.put(body, x, y, tone)
 
-	# Lit wick inside the globe.
 	pc.put(body, 8, 20, pal.mat(PixelCanvas.MAT_CLAY, 0))
 	pc.put(body, 8, 19, warm_core)
 	pc.put(body, 9, 19, pal.color(PixelCanvas.CLOTH_MID))
 
-	# Base and foot.
 	pc.fill_rect(body, Rect2i(5, 25, 7, 2), iron)
 	pc.hline(body, 5, 11, 25, iron_l)
 	pc.fill_rect(body, Rect2i(4, 27, 9, 3), iron_d)
@@ -572,8 +546,8 @@ static func _render_lantern(pc: PixelCanvas, img: Image, pal: PixelCanvas.Palett
 	if glow >= 0:
 		var reach: float = 11.5 if glow == 1 else 8.0
 		var ratio: float = 0.7 if glow == 1 else 0.22
-		for y in CANVAS_H:
-			for x in CANVAS_W:
+		for y: int in CANVAS_H:
+			for x: int in CANVAS_W:
 				var hx: float = float(x - 8)
 				var hy: float = float(y - 18)
 				var dist: float = sqrt(hx * hx + hy * hy)

@@ -46,6 +46,62 @@ var _contrast: bool = false
 var _kept: int = 0
 
 
+static func _act_for(level_id: String) -> int:
+  if level_id.length() >= 2 and level_id.begins_with("A"):
+    return clampi(level_id.substr(1, 1).to_int(), 1, 4)
+  return 1
+
+
+static func _who_for(level_id: String) -> String:
+  match level_id:
+    "A1-01":
+      return "cat"
+    "A1-02":
+      return "baker"
+    "A1-06":
+      return "guitarist"
+    "A2-07":
+      return "nurse"
+    "A3-16":
+      return "hibiscus"
+    "A4-19":
+      return "commuter"
+    _:
+      return ""
+
+
+## A blank card with the wax seal pressed into it: what a postcard looks like
+## before the courtyard it belongs to has been warmed.
+static func _locked_texture() -> Texture2D:
+  if _locked_tex != null:
+    return _locked_tex
+  var img: Image = Image.create_empty(PostcardArtGen.W, PostcardArtGen.H, false, Image.FORMAT_RGBA8)
+  img.fill(Color(0.20, 0.17, 0.18))
+  img.fill_rect(Rect2i(3, 3, PostcardArtGen.W - 6, PostcardArtGen.H - 6), Color(0.34, 0.30, 0.29))
+  img.fill_rect(Rect2i(6, 6, PostcardArtGen.W - 12, PostcardArtGen.H - 12), Color(0.40, 0.35, 0.33))
+  img.fill_rect(Rect2i(14, 16, PostcardArtGen.W - 28, 1), Color(0.49, 0.43, 0.39))
+  img.fill_rect(Rect2i(14, 20, PostcardArtGen.W - 46, 1), Color(0.46, 0.40, 0.37))
+
+  var centre: Vector2i = Vector2i(PostcardArtGen.W / 2, PostcardArtGen.H - 30)
+  var wax: Color = Color(0.46, 0.25, 0.25)
+  var rim: Color = Color(0.28, 0.15, 0.16)
+  for y: int in range(centre.y - 14, centre.y + 15):
+    for x: int in range(centre.x - 14, centre.x + 15):
+      var d: float = Vector2(float(x - centre.x), float(y - centre.y)).length()
+      if d <= 10.5:
+        img.set_pixel(x, y, wax)
+      elif d <= 12.0:
+        img.set_pixel(x, y, rim)
+  for ray: int in 8:
+    var angle: float = float(ray) * TAU / 8.0
+    var px: int = centre.x + int(round(cos(angle) * 6.0))
+    var py: int = centre.y + int(round(sin(angle) * 6.0))
+    if px > 0 and px < PostcardArtGen.W - 1 and py > 0 and py < PostcardArtGen.H - 1:
+      img.set_pixel(px, py, rim)
+  _locked_tex = ImageTexture.create_from_image(img)
+  return _locked_tex
+
+
 func _ready() -> void:
   name = "ShiftJournalUI"
   set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -59,12 +115,6 @@ func _ready() -> void:
   get_tree().paused = true
   set_process(true)
   queue_redraw()
-
-
-func _exit_tree() -> void:
-  var tree: SceneTree = get_tree()
-  if tree != null:
-    tree.paused = false
 
 
 func _process(delta: float) -> void:
@@ -103,6 +153,20 @@ func _unhandled_input(event: InputEvent) -> void:
     get_viewport().set_input_as_handled()
 
 
+func _draw() -> void:
+  draw_rect(Rect2(0.0, 0.0, float(VIEW_W), float(VIEW_H)), Color(0.035, 0.030, 0.045, 0.96))
+  draw_rect(Rect2(0.0, 30.0, float(VIEW_W), GRID_HEIGHT + 14.0), Color(0.11, 0.09, 0.08, 0.55))
+  var rule: Color = Color(0.92, 0.76, 0.42, 0.9) if _contrast else Color(BRASS, 0.7)
+  draw_line(Vector2(14.0, 31.0), Vector2(float(VIEW_W) - 14.0, 31.0), rule, 1.0)
+  draw_line(Vector2(14.0, 239.0), Vector2(float(VIEW_W) - 14.0, 239.0), rule, 1.0)
+
+
+func _exit_tree() -> void:
+  var tree: SceneTree = get_tree()
+  if tree != null:
+    tree.paused = false
+
+
 func _close() -> void:
   if _closing:
     return
@@ -121,8 +185,6 @@ func _scroll_by(amount: float) -> void:
 func _on_level_loaded(_level_id: String, _act: int) -> void:
   _close()
 
-
-# --- BUILD -------------------------------------------------------------------
 
 func _build_book() -> void:
   _count_kept()
@@ -197,13 +259,13 @@ func _build_overlay() -> void:
 
 
 func _build_cell(level_id: String) -> Control:
-  var cell := Control.new()
+  var cell: Control = Control.new()
   cell.name = "Card_%s" % level_id
   cell.custom_minimum_size = Vector2(CELL_W, CELL_H)
   cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
   var unlocked: bool = _is_unlocked(level_id)
-  var card := TextureRect.new()
+  var card: TextureRect = TextureRect.new()
   card.name = "Art"
   card.position = Vector2(CELL_INSET, 0.0)
   card.size = Vector2(CARD_W, CARD_H)
@@ -214,7 +276,7 @@ func _build_cell(level_id: String) -> Control:
   if unlocked:
     card.texture = PostcardArtGen.build(level_id, _act_for(level_id), _who_for(level_id))
     if _shader != null:
-      var material := ShaderMaterial.new()
+      var material: ShaderMaterial = ShaderMaterial.new()
       material.shader = _shader
       material.set_shader_parameter("reveal", 0.0)
       card.material = material
@@ -227,7 +289,7 @@ func _build_cell(level_id: String) -> Control:
 
 
 func _make_label(text: String, size_px: int, colour: Color) -> Label:
-  var label := Label.new()
+  var label: Label = Label.new()
   label.text = text
   label.mouse_filter = Control.MOUSE_FILTER_IGNORE
   label.add_theme_font_override("font", ThemeDB.fallback_font)
@@ -239,78 +301,10 @@ func _make_label(text: String, size_px: int, colour: Color) -> Label:
   return label
 
 
-# --- DATA --------------------------------------------------------------------
-
 func _is_unlocked(level_id: String) -> bool:
   if GameState.unlocked_postcards.has(level_id):
     return true
   return SaveManager.unlocked_postcards.has(level_id)
-
-
-static func _act_for(level_id: String) -> int:
-  if level_id.length() >= 2 and level_id.begins_with("A"):
-    return clampi(level_id.substr(1, 1).to_int(), 1, 4)
-  return 1
-
-
-static func _who_for(level_id: String) -> String:
-  match level_id:
-    "A1-01":
-      return "cat"
-    "A1-02":
-      return "baker"
-    "A1-06":
-      return "guitarist"
-    "A2-07":
-      return "nurse"
-    "A3-16":
-      return "hibiscus"
-    "A4-19":
-      return "commuter"
-    _:
-      return ""
-
-
-## A blank card with the wax seal pressed into it: what a postcard looks like
-## before the courtyard it belongs to has been warmed.
-static func _locked_texture() -> Texture2D:
-  if _locked_tex != null:
-    return _locked_tex
-  var img: Image = Image.create_empty(PostcardArtGen.W, PostcardArtGen.H, false, Image.FORMAT_RGBA8)
-  img.fill(Color(0.20, 0.17, 0.18))
-  img.fill_rect(Rect2i(3, 3, PostcardArtGen.W - 6, PostcardArtGen.H - 6), Color(0.34, 0.30, 0.29))
-  img.fill_rect(Rect2i(6, 6, PostcardArtGen.W - 12, PostcardArtGen.H - 12), Color(0.40, 0.35, 0.33))
-  img.fill_rect(Rect2i(14, 16, PostcardArtGen.W - 28, 1), Color(0.49, 0.43, 0.39))
-  img.fill_rect(Rect2i(14, 20, PostcardArtGen.W - 46, 1), Color(0.46, 0.40, 0.37))
-
-  var centre := Vector2i(PostcardArtGen.W / 2, PostcardArtGen.H - 30)
-  var wax := Color(0.46, 0.25, 0.25)
-  var rim := Color(0.28, 0.15, 0.16)
-  for y in range(centre.y - 14, centre.y + 15):
-    for x in range(centre.x - 14, centre.x + 15):
-      var d: float = Vector2(float(x - centre.x), float(y - centre.y)).length()
-      if d <= 10.5:
-        img.set_pixel(x, y, wax)
-      elif d <= 12.0:
-        img.set_pixel(x, y, rim)
-  for ray: int in 8:
-    var angle: float = float(ray) * TAU / 8.0
-    var px: int = centre.x + int(round(cos(angle) * 6.0))
-    var py: int = centre.y + int(round(sin(angle) * 6.0))
-    if px > 0 and px < PostcardArtGen.W - 1 and py > 0 and py < PostcardArtGen.H - 1:
-      img.set_pixel(px, py, rim)
-  _locked_tex = ImageTexture.create_from_image(img)
-  return _locked_tex
-
-
-# --- DRAW --------------------------------------------------------------------
-
-func _draw() -> void:
-  draw_rect(Rect2(0.0, 0.0, float(VIEW_W), float(VIEW_H)), Color(0.035, 0.030, 0.045, 0.96))
-  draw_rect(Rect2(0.0, 30.0, float(VIEW_W), GRID_HEIGHT + 14.0), Color(0.11, 0.09, 0.08, 0.55))
-  var rule: Color = Color(0.92, 0.76, 0.42, 0.9) if _contrast else Color(BRASS, 0.7)
-  draw_line(Vector2(14.0, 31.0), Vector2(float(VIEW_W) - 14.0, 31.0), rule, 1.0)
-  draw_line(Vector2(14.0, 239.0), Vector2(float(VIEW_W) - 14.0, 239.0), rule, 1.0)
 
 
 func _draw_overlay(canvas: Control) -> void:

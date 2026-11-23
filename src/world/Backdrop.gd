@@ -18,17 +18,17 @@ var glow: Rect2 = Rect2()
 var glow_strength: float = 0.9
 
 
-func set_frame(level_rect: Rect2) -> void:
-  glow = level_rect
-  queue_redraw()
-
-
 func _draw() -> void:
   for y: int in VIEW_H:
     var t: float = float(y) / float(VIEW_H - 1)
     draw_rect(Rect2(0, y, VIEW_W, 1), top_colour.lerp(bottom_colour, t * t))
   _draw_glow()
   _draw_vignette()
+
+
+func set_frame(level_rect: Rect2) -> void:
+  glow = level_rect
+  queue_redraw()
 
 
 ## A dusk halo around the courtyard: it makes the island feel lit from inside
@@ -48,11 +48,11 @@ func _draw_glow() -> void:
 
 
 func _draw_vignette() -> void:
-  var shade := Color(0.02, 0.02, 0.05)
+  var shade: Color = Color(0.02, 0.02, 0.05)
   for i: int in EDGE_BANDS:
     var t: float = 1.0 - float(i) / float(EDGE_BANDS)
     var alpha: float = 0.42 * t * t
-    var c := Color(shade.r, shade.g, shade.b, alpha)
+    var c: Color = Color(shade.r, shade.g, shade.b, alpha)
     draw_rect(Rect2(0, i, VIEW_W, 1), c)
     draw_rect(Rect2(0, VIEW_H - 1 - i, VIEW_W, 1), c)
     draw_rect(Rect2(i, 0, 1, VIEW_H), c)

@@ -11,7 +11,6 @@ extends RefCounted
 
 const STEM_COUNT: int = 5
 const DISTRICT_COUNT: int = 4
-const VERBOSE: bool = false
 
 const SAMPLE_RATE: int = 22050
 const BPM: float = 72.0
@@ -50,26 +49,18 @@ static func build(district: int) -> Array[AudioStreamWAV]:
 	var cached: Variant = _cache.get(d)
 	if cached != null:
 		return cached as Array[AudioStreamWAV]
-	var t0: int = Time.get_ticks_usec()
 	var stems: Array[AudioStreamWAV] = []
-	for stem in STEM_COUNT:
+	for stem: int in STEM_COUNT:
 		stems.append(_bake(d, stem))
 	_cache[d] = stems
-	if VERBOSE:
-		var ms: float = float(Time.get_ticks_usec() - t0) / 1000.0
-		print("StemSynth: district %d baked in %.1f ms" % [d, ms])
 	return stems
 
 
 ## Every district's five stems, index = district.
 static func build_all() -> Array:
-	var t0: int = Time.get_ticks_usec()
 	var all_stems: Array = []
-	for d in DISTRICT_COUNT:
+	for d: int in DISTRICT_COUNT:
 		all_stems.append(build(d))
-	if VERBOSE:
-		var ms: float = float(Time.get_ticks_usec() - t0) / 1000.0
-		print("StemSynth: all %d districts baked in %.1f ms" % [DISTRICT_COUNT, ms])
 	return all_stems
 
 
@@ -85,7 +76,6 @@ static func _bake(district: int, stem: int) -> AudioStreamWAV:
 	buf.resize(FRAMES)
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = _seed_for(district, stem)
-	var t0: int = Time.get_ticks_usec()
 	match stem:
 		0:
 			_ambience(buf, district, rng)
@@ -98,22 +88,15 @@ static func _bake(district: int, stem: int) -> AudioStreamWAV:
 		_:
 			_chime(buf, rng)
 	_seal(buf)
-	var t1: int = Time.get_ticks_usec()
-	var wav: AudioStreamWAV = _to_wav(buf, float(PEAK_TARGETS[stem]))
-	if VERBOSE:
-		var t2: int = Time.get_ticks_usec()
-		print("  stem %d: render %.1f ms + encode %.1f ms" % [stem, float(t1 - t0) / 1000.0, float(t2 - t1) / 1000.0])
-	return wav
+	return _to_wav(buf, float(PEAK_TARGETS[stem]))
 
 
 static func _seed_for(district: int, stem: int) -> int:
 	return 0x5A17C0DE + district * 7919 + stem * 104729
 
 
-# --- stem 0: district ambience ------------------------------------------------
-
 static func _ambience(buf: PackedFloat32Array, district: int, rng: RandomNumberGenerator) -> void:
-	# Paul Kellet's three-pole pink approximation over a one-pole low-pass: a
+	# Paul Kellett's three-pole pink approximation over a one-pole low-pass: a
 	# breathy coastal bed rather than white hiss. Baked at 11 kHz and
 	# interpolated: the bed has nothing above ~600 Hz to lose.
 	var half: int = FRAMES / 2
@@ -127,7 +110,7 @@ static func _ambience(buf: PackedFloat32Array, district: int, rng: RandomNumberG
 	# A multiply-with-carry LCG: two ops per frame instead of an RNG call, still
 	# seeded from the district's generator so the bed stays reproducible.
 	var state: int = rng.randi() | 1
-	for i in half:
+	for i: int in half:
 		state = state * 1103515245 + 12345
 		var w: float = float((state >> 16) & 0x7FFF) * 0.0000610 - 1.0
 		b0 = 0.99765 * b0 + w * 0.0990460
@@ -137,7 +120,7 @@ static func _ambience(buf: PackedFloat32Array, district: int, rng: RandomNumberG
 			breath += (0.70 + 0.30 * sin(TAU * float(i) / period) - breath) * 0.0025
 		low[i] = lp * breath
 	var prev: float = low[half - 1]
-	for k in half:
+	for k: int in half:
 		var v: float = low[k]
 		buf[k * 2] = v * 0.72 + prev * 0.28
 		buf[k * 2 + 1] = v
@@ -154,7 +137,7 @@ static func _ambience(buf: PackedFloat32Array, district: int, rng: RandomNumberG
 
 
 static func _amb_coast(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> void:
-	for k in 3:
+	for k: int in 3:
 		var at: float = rng.randf_range(4.0 + float(k) * 17.0, 13.0 + float(k) * 17.0)
 		_seagull(buf, int(at * float(SAMPLE_RATE)), rng.randf_range(0.92, 1.12), rng.randf_range(0.05, 0.09))
 	_stairs(buf, int(rng.randf_range(17.0, 21.0) * float(SAMPLE_RATE)), rng)
@@ -162,11 +145,10 @@ static func _amb_coast(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> v
 
 
 static func _seagull(buf: PackedFloat32Array, start: int, pitch: float, gain: float) -> void:
-	# Two falling "kee-ow" syllables with a rasp of noise on the glide.
 	var n: int = int(1.1 * float(SAMPLE_RATE))
 	var ph: float = 0.0
 	var amp: float = 0.0
-	for k in n:
+	for k: int in n:
 		var t: float = float(k) / float(SAMPLE_RATE)
 		var syl: float = 1.0 if (t < 0.28 or (t > 0.46 and t < 0.92)) else 0.0
 		var glide: float = 1.0 - 0.42 * fmod(t, 0.46) / 0.46
@@ -183,12 +165,12 @@ static func _seagull(buf: PackedFloat32Array, start: int, pitch: float, gain: fl
 static func _stairs(buf: PackedFloat32Array, start: int, rng: RandomNumberGenerator) -> void:
 	var steps: int = 5
 	var at: int = 0
-	for s in steps:
+	for s: int in steps:
 		var thud: float = rng.randf_range(0.7, 1.0) * 0.055
 		var n: int = int(0.16 * float(SAMPLE_RATE))
 		var ph: float = 0.0
 		var lp: float = 0.0
-		for k in n:
+		for k: int in n:
 			var t: float = float(k) / float(SAMPLE_RATE)
 			ph += (78.0 + 26.0 * float(s)) / float(SAMPLE_RATE)
 			if ph >= 1.0:
@@ -202,14 +184,13 @@ static func _stairs(buf: PackedFloat32Array, start: int, rng: RandomNumberGenera
 
 
 static func _amb_rain(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> void:
-	for k in 14:
+	for k: int in 14:
 		var at: float = rng.randf_range(0.5, 52.0)
 		_drip(buf, int(at * float(SAMPLE_RATE)), rng.randf_range(0.05, 0.12), rng.randf_range(760.0, 1650.0))
-	# A gutter still trickling under the veranda.
 	var n: int = int(3.2 * float(SAMPLE_RATE))
 	var start: int = int(rng.randf_range(24.0, 30.0) * float(SAMPLE_RATE))
 	var lp: float = 0.0
-	for k in n:
+	for k: int in n:
 		var noise: float = rng.randf() * 2.0 - 1.0
 		lp += (noise - lp) * 0.05
 		var env: float = sin(PI * float(k) / float(n))
@@ -219,7 +200,7 @@ static func _amb_rain(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> vo
 static func _drip(buf: PackedFloat32Array, start: int, gain: float, hz: float) -> void:
 	var n: int = int(0.09 * float(SAMPLE_RATE))
 	var ph: float = 0.0
-	for k in n:
+	for k: int in n:
 		var t: float = float(k) / float(SAMPLE_RATE)
 		ph += (hz * (1.0 + 1.5 * t / 0.09)) / float(SAMPLE_RATE)
 		if ph >= 1.0:
@@ -229,7 +210,7 @@ static func _drip(buf: PackedFloat32Array, start: int, gain: float, hz: float) -
 
 
 static func _amb_canal(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> void:
-	for k in 11:
+	for k: int in 11:
 		var at: float = rng.randf_range(0.5, 52.0)
 		_lap(buf, int(at * float(SAMPLE_RATE)), rng.randf_range(0.05, 0.10), rng.randf_range(0.7, 1.3), rng)
 
@@ -238,7 +219,7 @@ static func _lap(buf: PackedFloat32Array, start: int, gain: float, rate: float, 
 	var n: int = int(1.4 * float(SAMPLE_RATE))
 	var lp: float = 0.0
 	var ph: float = 0.0
-	for k in n:
+	for k: int in n:
 		var t: float = float(k) / float(SAMPLE_RATE)
 		var noise: float = rng.randf() * 2.0 - 1.0
 		lp += (noise - lp) * 0.045
@@ -253,7 +234,7 @@ static func _lap(buf: PackedFloat32Array, start: int, gain: float, rate: float, 
 static func _amb_dusk(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> void:
 	_tram_bell(buf, int(rng.randf_range(9.0, 13.0) * float(SAMPLE_RATE)), rng.randf_range(0.7, 0.9))
 	_tram_bell(buf, int(rng.randf_range(33.0, 39.0) * float(SAMPLE_RATE)), rng.randf_range(0.5, 0.8))
-	for k in 3:
+	for k: int in 3:
 		var at: float = 6.0 + float(k) * 15.0 + rng.randf_range(0.0, 4.0)
 		_cricket(buf, int(at * float(SAMPLE_RATE)), rng.randf_range(0.3, 0.5), rng)
 
@@ -262,12 +243,12 @@ static func _tram_bell(buf: PackedFloat32Array, start: int, gain: float) -> void
 	var partials: Array = [1.0, 2.03, 2.76, 4.07, 5.41]
 	var amps: Array = [1.0, 0.55, 0.38, 0.20, 0.12]
 	var n: int = int(2.6 * float(SAMPLE_RATE))
-	for p in partials.size():
+	for p: int in partials.size():
 		var inc: float = 612.0 * float(partials[p]) / float(SAMPLE_RATE)
 		var amp: float = float(amps[p])
 		var decay: float = exp(-1.0 / ((1.5 / (1.0 + float(p) * 0.7)) * float(SAMPLE_RATE)))
 		var ph: float = 0.0
-		for k in n:
+		for k: int in n:
 			ph += inc
 			if ph >= 1.0:
 				ph -= 1.0
@@ -283,9 +264,9 @@ static func _cricket(buf: PackedFloat32Array, start: int, gain: float, rng: Rand
 	var at: int = 0
 	var ph: float = 0.0
 	var hz: float = rng.randf_range(4200.0, 4900.0)
-	for p in pulses:
+	for p: int in pulses:
 		var n: int = int(0.028 * float(SAMPLE_RATE))
-		for k in n:
+		for k: int in n:
 			var t: float = float(k) / float(SAMPLE_RATE)
 			ph += hz / float(SAMPLE_RATE)
 			if ph >= 1.0:
@@ -295,10 +276,8 @@ static func _cricket(buf: PackedFloat32Array, start: int, gain: float, rng: Rand
 		at += int(0.052 * float(SAMPLE_RATE))
 
 
-# --- stem 1: felt electric piano ----------------------------------------------
-
 static func _felt_piano(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> void:
-	for bar in BAR_COUNT:
+	for bar: int in BAR_COUNT:
 		var ci: int = bar % 4
 		var start: int = bar * SAMPLES_PER_BAR
 		var vel: float = rng.randf_range(0.86, 1.0)
@@ -312,7 +291,7 @@ static func _felt_piano(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> 
 
 static func _stab(buf: PackedFloat32Array, start: int, ci: int, gain: float, dur: float) -> void:
 	var roll: int = int(0.013 * float(SAMPLE_RATE))
-	for v in 4:
+	for v: int in 4:
 		var midi: int = int(CHOLD[ci][v])
 		_ep_note(buf, start + v * roll, _hz(midi), dur, gain * (0.92 - 0.07 * float(v)))
 
@@ -328,7 +307,7 @@ static func _ep_note(buf: PackedFloat32Array, start: int, hz: float, dur: float,
 	var att: float = 0.0
 	# The 8 ms felt attack is its own tiny loop so the body pays for no envelope.
 	var ramp: int = mini(n, int(0.008 * float(SAMPLE_RATE)))
-	for k in ramp:
+	for k: int in ramp:
 		ph += inc
 		if ph >= float(SIN_SIZE):
 			ph -= float(SIN_SIZE)
@@ -338,7 +317,7 @@ static func _ep_note(buf: PackedFloat32Array, start: int, hz: float, dur: float,
 			idx -= FRAMES
 		buf[idx] += tab[int(ph) & SIN_MASK] * amp * att
 		amp *= decay
-	for k in range(ramp, n):
+	for k: int in range(ramp, n):
 		ph += inc
 		if ph >= float(SIN_SIZE):
 			ph -= float(SIN_SIZE)
@@ -353,7 +332,7 @@ static func _felt() -> PackedFloat32Array:
 	if _felt_tab.is_empty():
 		var tab: PackedFloat32Array = PackedFloat32Array()
 		tab.resize(SIN_SIZE + 1)
-		for i in SIN_SIZE + 1:
+		for i: int in SIN_SIZE + 1:
 			var ph: float = TAU * float(i) / float(SIN_SIZE)
 			# Fundamental plus soft 2nd/3rd: one table read per sample, harmonics
 			# implicit because they are integer multiples of the same phase.
@@ -362,13 +341,11 @@ static func _felt() -> PackedFloat32Array:
 	return _felt_tab
 
 
-# --- stem 2: kalimba arpeggio -------------------------------------------------
-
 static func _kalimba(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> void:
 	var offsets: Array = [0.5, 1.25, 2.5, 3.25]
-	for bar in BAR_COUNT:
+	for bar: int in BAR_COUNT:
 		var ci: int = bar % 4
-		for j in offsets.size():
+		for j: int in offsets.size():
 			var beat: float = float(bar * BEATS_PER_BAR) + float(offsets[j])
 			beat += rng.randf_range(-0.03, 0.03)
 			var at: int = int(beat * float(SAMPLES_PER_BEAT))
@@ -383,7 +360,7 @@ static func _pluck(buf: PackedFloat32Array, start: int, hz: float, gain: float, 
 	var size: int = maxi(2, int(float(SAMPLE_RATE) / hz))
 	var line: PackedFloat32Array = PackedFloat32Array()
 	line.resize(size)
-	for i in size:
+	for i: int in size:
 		line[i] = rng.randf() * 2.0 - 1.0
 	var n: int = int(0.55 * float(SAMPLE_RATE))
 	var pos: int = 0
@@ -391,7 +368,7 @@ static func _pluck(buf: PackedFloat32Array, start: int, hz: float, gain: float, 
 	var amp: float = gain
 	var damp: float = 0.9955
 	var ramp: int = mini(n, 64)
-	for k in n:
+	for k: int in n:
 		var cur: float = line[pos]
 		var avg: float = 0.5 * (cur + prev) * damp
 		line[pos] = avg
@@ -409,8 +386,6 @@ static func _pluck(buf: PackedFloat32Array, start: int, hz: float, gain: float, 
 		amp *= 0.99965
 
 
-# --- stem 3: warm cello/pad swell ---------------------------------------------
-
 static func _pad(buf: PackedFloat32Array) -> void:
 	var half: int = FRAMES / 2
 	var half_bar: int = SAMPLES_PER_BAR / 2
@@ -420,7 +395,7 @@ static func _pad(buf: PackedFloat32Array) -> void:
 	var ph_b: float = 0.0
 	var lp: float = 0.0
 	var breath: float = 0.72
-	for bar in BAR_COUNT:
+	for bar: int in BAR_COUNT:
 		var root_hz: float = _hz(int(CHORD_ROOTS[bar % 4]))
 		# Two detuned triangles; only the increment changes at a bar line, so the
 		# phase stays continuous and the swell glides into the next root silently.
@@ -429,7 +404,7 @@ static func _pad(buf: PackedFloat32Array) -> void:
 		var goal: float = 0.62 + 0.38 * sin(TAU * float(bar) / float(BAR_COUNT / 4))
 		var step: float = (goal - breath) / float(half_bar)
 		var s0: int = bar * half_bar
-		for i in range(s0, s0 + half_bar):
+		for i: int in range(s0, s0 + half_bar):
 			ph_a += ia
 			if ph_a >= 1.0:
 				ph_a -= 1.0
@@ -441,14 +416,12 @@ static func _pad(buf: PackedFloat32Array) -> void:
 			breath += step
 			low[i] = lp * breath * 0.62
 	var prev: float = low[half - 1]
-	for k in half:
+	for k: int in half:
 		var v: float = low[k]
 		buf[k * 2] = v * 0.72 + prev * 0.28
 		buf[k * 2 + 1] = v
 		prev = v
 
-
-# --- stem 4: harmonic resolution ----------------------------------------------
 
 static func _chime(buf: PackedFloat32Array, rng: RandomNumberGenerator) -> void:
 	var b12: int = 12 * SAMPLES_PER_BAR
@@ -478,7 +451,7 @@ static func _bell(buf: PackedFloat32Array, start: int, hz: float, gain: float, d
 	var d2: float = exp(-1.0 / (0.42 * float(SAMPLE_RATE)))
 	var ramp: int = mini(n, int(0.025 * float(SAMPLE_RATE)))
 	var att_inc: float = 1.0 / float(ramp)
-	for k in n:
+	for k: int in n:
 		ph1 += i1
 		if ph1 >= 1.0:
 			ph1 -= 1.0
@@ -495,8 +468,6 @@ static func _bell(buf: PackedFloat32Array, start: int, hz: float, gain: float, d
 			idx -= FRAMES
 		buf[idx] += v
 
-
-# --- shared helpers -----------------------------------------------------------
 
 static func _hz(midi: int) -> float:
 	return 440.0 * pow(2.0, (float(midi) - 69.0) / 12.0)
@@ -515,7 +486,7 @@ static func _seal(buf: PackedFloat32Array) -> void:
 	var delta: float = buf[0] - buf[FRAMES - 1]
 	if absf(delta) < 0.000001:
 		return
-	for j in SEAM:
+	for j: int in SEAM:
 		var w: float = float(j + 1) / float(SEAM)
 		buf[FRAMES - SEAM + j] += delta * w
 
@@ -524,7 +495,7 @@ static func _to_wav(buf: PackedFloat32Array, peak_target: float) -> AudioStreamW
 	# Peak on every second frame plus a 25% margin: everything here is smooth at
 	# 22 kHz, so the stride cannot miss the true peak by more than that.
 	var peak: float = 0.0
-	for i in range(0, FRAMES, 2):
+	for i: int in range(0, FRAMES, 2):
 		var a: float = absf(buf[i])
 		if a > peak:
 			peak = a
@@ -535,7 +506,7 @@ static func _to_wav(buf: PackedFloat32Array, peak_target: float) -> AudioStreamW
 	var k: float = scale * 32700.0
 	var data: PackedByteArray = PackedByteArray()
 	data.resize(FRAMES * 2)
-	for i in FRAMES:
+	for i: int in FRAMES:
 		data.encode_s16(i * 2, int(buf[i] * k))
 	var wav: AudioStreamWAV = AudioStreamWAV.new()
 	wav.format = AudioStreamWAV.FORMAT_16_BITS

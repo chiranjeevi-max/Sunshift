@@ -1,8 +1,7 @@
 class_name TitleScreen
 extends Control
 
-## Live title: a golden-hour sky, the wordmark, and one line of invitation.
-## Any key starts the first courtyard.
+## A key press or click opens the promenade.
 
 const VIEW_W: int = 480
 const VIEW_H: int = 270
@@ -26,18 +25,18 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
   if _started:
     return
-  var key := event as InputEventKey
-  var button := event as InputEventMouseButton
+  var key: InputEventKey = event as InputEventKey
+  var button: InputEventMouseButton = event as InputEventMouseButton
   if (key != null and key.pressed and not key.echo) or (button != null and button.pressed):
     _started = true
-    var main := _find_main()
+    var main: Main = _find_main()
     if main != null:
       main.start_first_level()
 
 
 func _draw() -> void:
-  var sky_top := Color(0.16, 0.14, 0.28)
-  var sky_low := Color(0.55, 0.33, 0.26)
+  var sky_top: Color = Color(0.16, 0.14, 0.28)
+  var sky_low: Color = Color(0.55, 0.33, 0.26)
   draw_rect(Rect2(Vector2.ZERO, Vector2(VIEW_W, VIEW_H)), sky_top)
   var band_height: float = VIEW_H * 0.62 / 18.0
   for band: int in 18:
@@ -47,7 +46,7 @@ func _draw() -> void:
   draw_rect(Rect2(0, VIEW_H * 0.62, VIEW_W, VIEW_H * 0.38), Color(0.13, 0.12, 0.18))
 
   var sun_y: float = VIEW_H * 0.50 + sin(_sun_phase) * 3.0
-  var centre := Vector2(VIEW_W * 0.72, sun_y)
+  var centre: Vector2 = Vector2(VIEW_W * 0.72, sun_y)
   draw_circle(centre + Vector2(0, 14), roundf(SUN_RADIUS * 1.9), Color(1.0, 0.72, 0.42, 0.08))
   draw_circle(centre + Vector2(0, 8), roundf(SUN_RADIUS * 1.35), Color(1.0, 0.76, 0.46, 0.14))
   draw_circle(centre, roundf(SUN_RADIUS), Color(1.0, 0.86, 0.60, 0.95))

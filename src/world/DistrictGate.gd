@@ -25,40 +25,12 @@ var _pulse: float = 0.0
 var _glow: Node2D
 
 
-func configure(p_district: int, p_motif: int) -> void:
-  district = clampi(p_district, 0, 3)
-  act = district + 1
-  motif = clampi(p_motif, 0, 3)
-  _palette = PixelCanvas.load_palette(district)
-
-
-func set_lit(value: bool) -> void:
-  if lit == value:
-    return
-  lit = value
-  queue_redraw()
-
-
-func set_reachable(value: bool) -> void:
-  if reachable == value:
-    return
-  reachable = value
-  queue_redraw()
-
-
 func _process(delta: float) -> void:
   # Only the lamp breathes, and only while you can actually use the door.
   var want: bool = reachable
   if want != lit:
     _pulse = move_toward(_pulse, 1.0 if want else 0.0, delta * 4.0)
     queue_redraw()
-
-
-func _role(role_name: String, fallback: Color) -> Color:
-  if _palette == null:
-    return fallback
-  var c: Color = _palette.named(role_name)
-  return c if c.a > 0.0 else fallback
 
 
 func _draw() -> void:
@@ -87,7 +59,7 @@ func _draw() -> void:
 
   # Lamp above the arch. Unlit lamps stay visible but cold, so the promenade
   # shows you where you have not been yet.
-  var lamp := Rect2(W * 0.5 - 4, -14, 8, 10)
+  var lamp: Rect2 = Rect2(W * 0.5 - 4, -14, 8, 10)
   var lamp_colour: Color = accent if lit else Color(0.28, 0.28, 0.32)
   if _pulse > 0.0:
     lamp_colour = lamp_colour.lerp(accent.lightened(0.35), _pulse)
@@ -99,9 +71,37 @@ func _draw() -> void:
   draw_rect(Rect2(lamp.position.x, lamp.end.y, lamp.size.x, 1), stone_dark)
   if lit or _pulse > 0.0:
     var halo: float = (2.0 + _pulse * 4.0)
-    var glow := Color(accent.r, accent.g, accent.b, 0.10 + _pulse * 0.22)
+    var glow: Color = Color(accent.r, accent.g, accent.b, 0.10 + _pulse * 0.22)
     draw_rect(Rect2(lamp.position.x - halo, lamp.position.y - halo,
       lamp.size.x + halo * 2.0, lamp.size.y + halo * 2.0), glow)
+
+
+func configure(p_district: int, p_motif: int) -> void:
+  district = clampi(p_district, 0, 3)
+  act = district + 1
+  motif = clampi(p_motif, 0, 3)
+  _palette = PixelCanvas.load_palette(district)
+
+
+func set_lit(value: bool) -> void:
+  if lit == value:
+    return
+  lit = value
+  queue_redraw()
+
+
+func set_reachable(value: bool) -> void:
+  if reachable == value:
+    return
+  reachable = value
+  queue_redraw()
+
+
+func _role(role_name: String, fallback: Color) -> Color:
+  if _palette == null:
+    return fallback
+  var c: Color = _palette.named(role_name)
+  return c if c.a > 0.0 else fallback
 
 
 func _draw_motif(wood: Color, wood_dark: Color, accent: Color, stone_light: Color) -> void:

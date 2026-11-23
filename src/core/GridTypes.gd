@@ -4,10 +4,37 @@ extends RefCounted
 ## Pure grid vocabulary for Sunshift: enums, direction tables and string lookups.
 ## Part of src/core/, so it is RefCounted and static only — no engine state.
 
-enum TileType { VOID, FLOOR, WALL, WATER, PUDDLE, STAIRS, RAILING }
-enum PropType { MIRROR, AWNING, SHUTTER, PRISM, STAINED_GLASS, LANTERN }
-enum WishType { WARM_SUN, SOFT_SHADE, SHARED_BEAM, ROSE_LIGHT, LANTERN_GLOW }
-enum LightType { NONE, DIRECT_SUN, BEAM_AMBER, BEAM_ROSE, LANTERN_GLOW }
+enum TileType {
+  VOID,
+  FLOOR,
+  WALL,
+  WATER,
+  PUDDLE,
+  STAIRS,
+  RAILING,
+}
+enum PropType {
+  MIRROR,
+  AWNING,
+  SHUTTER,
+  PRISM,
+  STAINED_GLASS,
+  LANTERN,
+}
+enum WishType {
+  WARM_SUN,
+  SOFT_SHADE,
+  SHARED_BEAM,
+  ROSE_LIGHT,
+  LANTERN_GLOW,
+}
+enum LightType {
+  NONE,
+  DIRECT_SUN,
+  BEAM_AMBER,
+  BEAM_ROSE,
+  LANTERN_GLOW,
+}
 
 const MAX_BOUNCES: int = 16
 const MAX_RAY_STEPS: int = 64
