@@ -3,7 +3,7 @@
 ## Engine and references
 
 - Godot Engine and its bundled Open Sans fallback font (SIL Open Font License 1.1). [Godot copyright and license notices](https://github.com/godotengine/godot/blob/4.7.2-stable/COPYRIGHT.txt)
-- Paul Kellett's economy pink-noise filter coefficients are used in `src/audio/StemSynth.gd`. Redistribution terms to confirm. [Original filter notes](https://www.musicdsp.org/en/latest/Filters/76-pink-noise-filter.html)
+- The ambience uses the pink-noise filter from Paul Kellett's mda TestTone. [TestTone source](https://svn.code.sf.net/p/mda-vst/code/src/mdaTestTone.cpp) · [MIT license notice](docs/licenses/mda-testtone.txt)
 
 ## Sunshift assets
 

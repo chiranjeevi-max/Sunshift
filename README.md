@@ -4,6 +4,8 @@
 
 Sunshift is a 2D puzzle game about guiding the last hour of daylight through four coastal districts. Play as Milo and shift the sun, turn mirrors, and move awnings to give each neighbour the light or shade they need.
 
+Made for [GitHub Game Off 2026](https://itch.io/jam/game-off-2026), whose theme is **SHIFT**.
+
 ## Requirements
 
 `project.godot` targets Godot 4.7 with the Compatibility renderer. The project is tested on Godot 4.7.2 stable. [Godot 4.7.2 downloads](https://godotengine.org/download/archive/4.7.2-stable/)
@@ -46,6 +48,10 @@ D-pad left and right are bound to both movement and sun rotation.
 | `PaletteDirector` | District palettes and gradual warmth changes |
 | `SaveManager` | Progress, audio settings, and accessibility preferences |
 | `AudioSynth` | Procedural sound effects and adaptive music |
+
+## Web export
+
+Install the Godot 4.7.2 stable export templates and add a Web preset. Turn off Thread Support and export to `index.html`. Keep the generated files together when serving the build or zipping it for itch.io.
 
 ## Verification
 
